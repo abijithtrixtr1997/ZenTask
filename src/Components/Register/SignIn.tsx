@@ -8,13 +8,10 @@ import {
   Anchor,
 } from "@mantine/core";
 import { IconBrandGoogleFilled } from "@tabler/icons-react";
-import {
-  handleSignIn,
-  handleSignUp,
-  signInWithGoogle,
-} from "./signUpFunctions";
+import { handleSignIn, handleSignUp } from "./signUpFunctions";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../supabaseClient";
 
 export const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -29,6 +26,22 @@ export const SignIn = () => {
       console.log("User signed in succesfully", data?.user);
       navigate("/");
     }
+  };
+
+  const signInWithGoogle = async () => {
+    console.log("in sign in function");
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}`, // This ensures the OAuth flow uses a pop-up and doesn't redirect the user
+      },
+    });
+    navigate("/");
+    if (error) {
+      console.log("Google sign-in error:", error);
+      return { error };
+    }
+    return { error: null };
   };
 
   const onGoogleSignIn = async () => {
