@@ -8,29 +8,59 @@ import {
   Anchor,
 } from "@mantine/core";
 import { IconBrandGoogleFilled } from "@tabler/icons-react";
-import { handleSignUp, signInWithGoogle } from "./signUpFunctions";
+import {
+  handleSignIn,
+  handleSignUp,
+  signInWithGoogle,
+} from "./signUpFunctions";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const onSignIn = async () => {
+    const { data, error } = await handleSignIn(email, password);
+    if (error) {
+      console.error("Unable to sign in.", error);
+    } else {
+      console.log("User signed in succesfully", data?.user);
+      navigate("/");
+    }
+  };
+
+  const onGoogleSignIn = async () => {
+    const error = await signInWithGoogle();
+    if (error) {
+      console.error("Unable to sign in with Google.", error);
+    } else {
+      console.log("User signed in succesfully with Google.");
+      navigate("/");
+    }
+  };
+
   return (
     <div className="sign-in">
       <Container className="login-heading">
-        <Title ta="center" order={1}>
+        <Title ta="center" order={1} size={"xl"}>
           Login
         </Title>
       </Container>
       <Container className="welcome-text">
-        <Text size="1.2rem" m={"1rem"} tt={"capitalize"} fw={"bold"}>
+        <Text size="md" mt={"xs"} tt={"capitalize"} fw={"bold"} ta={"center"}>
           Welcome to ZenTask
         </Text>
       </Container>
       <Flex
         direction={"column"}
-        gap={"0.5rem"}
+        gap={"xs"}
         w={"100%"}
         align={"center"}
         justify={"center"}
         className="user-input"
-        p={"1rem"}
+        p={"xs"}
       >
         <TextInput
           className="username-input"
@@ -38,6 +68,8 @@ export const SignIn = () => {
           type="text"
           name="username"
           placeholder="Username or email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <TextInput
@@ -46,6 +78,8 @@ export const SignIn = () => {
           type="password"
           name="password"
           placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </Flex>
       <Flex
@@ -53,11 +87,13 @@ export const SignIn = () => {
         justify={"center"}
         align={"center"}
         direction={"column"}
-        gap={"0.5rem"}
+        gap={"xs"}
       >
-        <Button className="login-button">Sign In</Button>
+        <Button className="login-button" size="xs" onClick={onSignIn}>
+          Sign In
+        </Button>
         <Anchor href="#">
-          <Text>Forgot password?</Text>
+          <Text size="xs">Forgot password?</Text>
         </Anchor>
       </Flex>
 
@@ -67,25 +103,19 @@ export const SignIn = () => {
         align={"center"}
         justify={"center"}
       >
-        <Flex
-          align={"center"}
-          gap={"0.5rem"}
-          justify={"center"}
-          mt={"0.5rem"}
-          p={"1rem 1rem"}
-        >
-          <Text fw={"bold"} style={{ fontSize: "1.2rem" }}>
+        <Flex align={"center"} gap={"xs"} justify={"center"} p={"xs"}>
+          <Text fw={"bold"} size="sm">
             New to ZenTask?
           </Text>
-          <Button className="signup-button" onClick={handleSignUp}>
+          <Button size={"xs"} className="signup-button" onClick={handleSignUp}>
             Sign Up
           </Button>
         </Flex>
-        <div className="or-container">
-          <p style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+        <Container className="or-container" mb={"xs"}>
+          <Text size="xs" style={{ fontWeight: "bold" }}>
             Or sign in using
-          </p>
-        </div>
+          </Text>
+        </Container>
         <Flex
           className="sign-in-methods"
           justify={"center"}
@@ -95,14 +125,15 @@ export const SignIn = () => {
         >
           <Button
             className="google-login-button"
-            style={{ height: "3.5rem" }}
-            onClick={signInWithGoogle}
+            size="md"
+            variant="filled"
+            onClick={onGoogleSignIn}
           >
-            <Text size="lg" p={"0.25rem 0.25rem"} mr={"0.5rem"}>
+            <Text size="lg" p={"xs"}>
               Sign in with Google
             </Text>
             <IconBrandGoogleFilled
-              size={"1.5rem"}
+              size={"20"}
               stroke={1}
               className="google-icon"
             />

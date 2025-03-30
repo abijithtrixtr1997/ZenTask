@@ -2,9 +2,23 @@ import { Title, Button, Container, Flex, Avatar, Popover } from "@mantine/core";
 import { IconLogout } from "@tabler/icons-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { LogoSVG } from "../Images/SVG/SVGs";
+import { supabase } from "../../supabaseClient";
 import { User } from "@supabase/supabase-js";
 
+import { useNavigate } from "react-router-dom";
+
 export const Navbar = ({ user }: { user: User }) => {
+  const navigate = useNavigate();
+  const handleLogOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error logging out:", error.message);
+    } else {
+      console.log("Logged out successfully!");
+      navigate("/login");
+    }
+  };
+
   return (
     <>
       <Flex
@@ -34,7 +48,7 @@ export const Navbar = ({ user }: { user: User }) => {
         >
           <Popover.Target>
             <div className="user-ddm">
-              <Avatar variant="filled" src={user.user_metadata?.avatar_url} />
+              <Avatar variant="filled" src={user?.user_metadata?.avatar_url} />
             </div>
           </Popover.Target>
           <Popover.Dropdown>
@@ -45,7 +59,12 @@ export const Navbar = ({ user }: { user: User }) => {
               <Button variant="subtle" justify="center" fullWidth mb={"0.5rem"}>
                 Settings
               </Button>
-              <Button variant="danger" justify="center" fullWidth>
+              <Button
+                variant="danger"
+                justify="center"
+                fullWidth
+                onClick={handleLogOut}
+              >
                 <Flex
                   className="logout-group"
                   align={"center"}

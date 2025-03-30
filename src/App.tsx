@@ -44,7 +44,7 @@ export const App = () => {
         console.error("Error fetching user:", error.message);
       }
       setUser(data?.user);
-      console.log("User fetched successfully!", user);
+      console.log("User fetched successfully!", data?.user);
     };
     fetchUser();
   }, []);
@@ -55,6 +55,7 @@ export const App = () => {
       <MantineProvider theme={theme}>
         <Router>
           <Routes>
+            <Route path="/login" element={<Login />} />
             <Route path="/" element={user ? <Home user={user} /> : <Login />} />
           </Routes>
         </Router>

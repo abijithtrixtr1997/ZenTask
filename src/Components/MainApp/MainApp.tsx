@@ -1,16 +1,12 @@
 import { Button, TextInput, List, ThemeIcon } from "@mantine/core";
 import { IconCheck, IconClipboardPlus } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
-import { User } from "@supabase/supabase-js";
+import { useState } from "react";
 import { Navbar } from "../Navbar/Navbar";
+import { User } from "@supabase/supabase-js";
 
 export const MainApp = ({ user }: { user: User }) => {
   const [task, setTask] = useState<string>("");
   const [tasks, setTasks] = useState<string[]>([]);
-
-  useEffect(() => {
-    console.log(user);
-  });
 
   const addTask = () => {
     if (task.trim()) {

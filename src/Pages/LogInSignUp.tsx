@@ -1,4 +1,3 @@
-import { Flex } from "@mantine/core";
 import { SignIn } from "../Components/Register/SignIn";
 import { SignUp } from "../Components/Register/Signup";
 
@@ -14,20 +13,10 @@ export const LogInSignUp = () => {
         alignItems: "center",
       }}
     >
-      <Flex
-        bg={"#CFDEE7"}
-        direction={"row"}
-        align={"center"}
-        justify={"center"}
-        className="inner-login-container"
-        p={"2rem"}
-        w={"25%"}
-        mih={"45%"}
-        mah={"45%"}
-      >
+      <div className="inner-login-container">
         <SignIn />
         <SignUp />
-      </Flex>
+      </div>
     </div>
   );
 };

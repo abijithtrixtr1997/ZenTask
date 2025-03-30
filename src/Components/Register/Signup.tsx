@@ -1,6 +1,8 @@
 import { Flex, TextInput, Button, PasswordInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { supabase } from "../../supabaseClient";
+import { IconArrowLeft } from "@tabler/icons-react";
+import { handleBackClick } from "./signUpFunctions";
 
 interface SignUpFormValues {
   email: string;
@@ -71,9 +73,15 @@ export const SignUp = () => {
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center    ",
+        alignItems: "center",
+        flexDirection: "column",
       }}
     >
+      <div className="back-arrow-container">
+        <Button className="back-arrow" onClick={handleBackClick} size="xs">
+          <IconArrowLeft></IconArrowLeft>
+        </Button>
+      </div>
       <Flex
         className="signup-form"
         w={"80%"}
