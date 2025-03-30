@@ -1,0 +1,64 @@
+import { Title, Button, Container, Flex, Avatar, Popover } from "@mantine/core";
+import { IconLogout } from "@tabler/icons-react";
+import { ThemeToggle } from "./ThemeToggle";
+import { LogoSVG } from "../Images/SVG/SVGs";
+import { User } from "@supabase/supabase-js";
+
+export const Navbar = ({ user }: { user: User }) => {
+  return (
+    <>
+      <Flex
+        align="center"
+        justify="space-between"
+        w={"100%"}
+        className="top-navbar"
+      >
+        <div className="logo-container">
+          <LogoSVG />
+        </div>
+
+        <Title order={1} style={{ fontSize: "2.8rem" }} ml={"1rem"} c={"#789"}>
+          ZenTask
+        </Title>
+        <Container className="theme-container" mr={"0.5rem"}>
+          <ThemeToggle />
+        </Container>
+        <Popover
+          width={200}
+          position="bottom"
+          withArrow
+          shadow="md"
+          closeOnClickOutside
+          closeOnEscape
+          offset={10}
+        >
+          <Popover.Target>
+            <div className="user-ddm">
+              <Avatar variant="filled" src={user.user_metadata?.avatar_url} />
+            </div>
+          </Popover.Target>
+          <Popover.Dropdown>
+            <Flex className="ddm-menu" align={"center"} direction={"column"}>
+              <Button variant="subtle" justify="center" fullWidth>
+                Profile
+              </Button>
+              <Button variant="subtle" justify="center" fullWidth mb={"0.5rem"}>
+                Settings
+              </Button>
+              <Button variant="danger" justify="center" fullWidth>
+                <Flex
+                  className="logout-group"
+                  align={"center"}
+                  justify={"center"}
+                >
+                  <IconLogout></IconLogout>
+                  <p style={{ marginLeft: "0.5rem" }}>Log out</p>
+                </Flex>
+              </Button>
+            </Flex>
+          </Popover.Dropdown>
+        </Popover>
+      </Flex>
+    </>
+  );
+};
