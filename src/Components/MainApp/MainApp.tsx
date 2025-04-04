@@ -1,28 +1,21 @@
 import { Navbar } from "../Navbar/Navbar";
 import { User } from "@supabase/supabase-js";
-import { AddTask } from "../AddTask/AddTask";
+import { TaskList } from "../TaskList/TaskList";
+import { useState } from "react";
+import { CreateNew } from "../CreateNew";
 
 export const MainApp = ({ user }: { user: User }) => {
+  const [taskAdded, setTaskAdded] = useState<boolean>(false);
+
   return (
     <>
       <div className="main-app">
         <Navbar user={user} />
-        <AddTask />
+        <div className="create-new-container">
+          <CreateNew setTaskAdded={setTaskAdded} taskAdded={taskAdded} />
+        </div>
 
-        {/* <List spacing={"sm"} size="md" center>
-          {tasks.map((task, index) => (
-            <List.Item
-              key={index}
-              icon={
-                <ThemeIcon color="teal" size={24} radius="xl">
-                  <IconCheck size={16} />
-                </ThemeIcon>
-              }
-            >
-              {task}
-            </List.Item>
-          ))}
-        </List> */}
+        <TaskList user={user} taskAdded={taskAdded} />
       </div>
     </>
   );

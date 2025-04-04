@@ -5,8 +5,9 @@ import { IconBrightness2 } from "@tabler/icons-react";
 export const ThemeToggle = () => {
   return (
     <Button
-      variant="filled"
+      variant="subtle"
       className="theme-button"
+      color="#8f9562"
       h="2.2rem"
       w={"2.2rem"}
       p={0}

@@ -21,7 +21,7 @@ export const LeftBar = () => {
     <>
       <div className="leftbar">
         <Box maw={400} mx={"auto"} className="box-leftbar" p={0} m={0}>
-          <Group justify="center" mb={5}>
+          <Group justify="center" mb={5} h={42}>
             <Button
               mb={"0.5rem"}
               onClick={toggle}
@@ -29,6 +29,7 @@ export const LeftBar = () => {
               h={"2rem"}
               p={0}
               m={0}
+              color="#8f9562"
             >
               <IconMenu2 size={"1.2rem"}></IconMenu2>
             </Button>
@@ -41,13 +42,13 @@ export const LeftBar = () => {
               direction={"column"}
               gap={"1rem"}
               p={"1rem "}
-              style={{ borderTop: "2px solid #999" }}
+              style={{ borderTop: "2px solid #8f9562" }}
             >
               <Anchor w={"100%"}>
                 <Tooltip label="Home" position="top-end" offset={5}>
                   <Button
                     variant="subtle"
-                    color="gray"
+                    color="#8f9562"
                     fullWidth
                     className="nav-button"
                     justify="start"
@@ -70,7 +71,7 @@ export const LeftBar = () => {
                 <Tooltip label="Notes" position="top-end" offset={5}>
                   <Button
                     variant="subtle"
-                    color="gray"
+                    color="#8f9562"
                     fullWidth
                     className="nav-button"
                     justify="start"
@@ -93,7 +94,7 @@ export const LeftBar = () => {
                 <Tooltip label="Todo" position="top-end" offset={5}>
                   <Button
                     variant="subtle"
-                    color="gray"
+                    color="#8f9562"
                     fullWidth
                     className="nav-button"
                     justify="start"

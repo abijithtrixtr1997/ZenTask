@@ -31,7 +31,12 @@ export const Navbar = ({ user }: { user: User }) => {
           <LogoSVG />
         </div>
 
-        <Title order={1} style={{ fontSize: "2.8rem" }} ml={"1rem"} c={"#789"}>
+        <Title
+          order={1}
+          style={{ fontSize: "2.8rem" }}
+          ml={"1rem"}
+          c={"#8f9562"}
+        >
           ZenTask
         </Title>
         <Container className="theme-container" mr={"0.5rem"}>
