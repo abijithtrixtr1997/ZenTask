@@ -73,7 +73,6 @@ export const FloatingContainer = ({
         return (
           <AddNote
             setTaskAdded={setTaskAdded}
-            taskAdded={taskAdded}
             clicked={clicked}
             setClicked={setClicked}
           />

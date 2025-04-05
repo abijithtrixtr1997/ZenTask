@@ -42,12 +42,12 @@ const todoSlice = createSlice({
         supabase.from("Todo").update(updates).eq("id", id);
       }
     },
-    deletTask: (state, action: PayloadAction<string>) => {
+    deleteTask: (state, action: PayloadAction<string>) => {
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
       supabase.from("Todo").delete().eq("id", action.payload);
     },
   },
 });
 
-export const { addTask, setTasks, updateTask, deletTask } = todoSlice.actions;
+export const { addTask, setTasks, updateTask, deleteTask } = todoSlice.actions;
 export default todoSlice.reducer;

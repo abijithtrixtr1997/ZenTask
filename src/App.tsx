@@ -12,32 +12,15 @@ import { Home } from "./Pages/Home";
 import classes from "./App.module.css";
 import "@fontsource/source-code-pro/400.css";
 import todoReducer from "./Components/Slices/TodoSlice";
-// import { createTheme } from '@mui/material/styles'
+import noteReducer from "./Components/Slices/NoteSlice";
 
 export const App = () => {
   const store = configureStore({
     reducer: {
       todo: todoReducer,
+      note: noteReducer,
     },
   });
-
-  // const newTheme = (theme) => createTheme({
-  //   ...theme,
-  //   components: {
-  //     MuiPickersToolbar: {
-  //       styleOverrides: {
-  //         root: {
-  //           color: '#8f9562',
-  //           borderRadius: '2px',
-  //           borderWidth: '1px',
-  //           borderColor: '#505730',
-  //           border: '1px solid',
-  //           backgroundColor: '#f0f2e4',
-  //         }
-  //       }
-  //     }
-  //   }
-  // })
 
   const theme = createTheme({
     fontFamily: "Source Code Pro, monospace",

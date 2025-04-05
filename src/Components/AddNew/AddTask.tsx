@@ -30,22 +30,18 @@ const schema = yup.object().shape({
   due: yup
     .string()
     .test("is-valid-date", "Due must be a valid date", (value) => {
-      if (!value) return true; // If the due date is not provided, skip validation.
-
-      // Attempt to parse the input date string to a valid JavaScript Date object
+      if (!value) return true;
       const parsedDate = new Date(value);
-      return !isNaN(parsedDate.getTime()); // Check if the date is valid
+      return !isNaN(parsedDate.getTime());
     })
     .test("is-future-date", "Due must be a future date", (value) => {
-      if (!value) return true; // If the due date is not provided, skip validation.
-
+      if (!value) return true;
       const parsedDate = new Date(value);
       const currentDate = new Date();
-      return parsedDate > currentDate; // Check if the date is in the future
+      return parsedDate > currentDate;
     })
     .transform((value) => {
-      if (!value) return value; // If the due date is not provided, return the original value
-      // Attempt to parse the given time format 'YYYY-MM-DD HH:mm AM/PM' to a Date
+      if (!value) return value;
       const dateWithTime = value.replace(
         /(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2} (AM|PM))/,
         "$1T$2"

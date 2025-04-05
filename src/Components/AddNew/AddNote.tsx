@@ -3,21 +3,22 @@ import { Container, Button, Flex } from "@mantine/core"; // Import Bootstrap com
 import Quill from "quill";
 import "quill/dist/quill.snow.css"; // Import Quill styles
 import { IconDeviceFloppy } from "@tabler/icons-react";
+import { supabase } from "../../supabaseClient"; // Import Supabase client
+import { User } from "@supabase/supabase-js";
 
 interface AddNoteProps {
   setTaskAdded: (taskAdded: boolean) => void;
-  taskAdded: boolean; // Function to notify the parent that task was added
   clicked: boolean; // Function to notify the parent that task was added
   setClicked: (clicked: boolean) => void;
 }
 
 export const AddNote = ({
   setTaskAdded,
-  taskAdded,
   clicked,
   setClicked,
 }: AddNoteProps) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
+  const [user, setUser] = useState<User | null>(null); // State to hold user data
   const [quill, setQuill] = useState<Quill | null>(null); // State to hold the Quill instance
 
   useEffect(() => {
@@ -38,20 +39,57 @@ export const AddNote = ({
     }
   }, []);
 
-  const handleSave = () => {
+  useEffect(() => {
+    const getUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+
+      if (error) throw error;
+      setUser(data?.user);
+      return data.user;
+    };
+    getUser();
+    console.log("User:", user);
+  }, []);
+
+  const handleSave = async () => {
     if (quill) {
       const noteContent = quill.root.innerHTML;
+      const plainText = quill.getText(); // Get plain text content
+      const editorElement = quill.root;
+
       console.log("Note content:", noteContent);
+      console.log("Plain text content:", plainText); // Log plain text content
+      if (plainText.trim() === "" && noteContent.trim() === "") {
+        editorElement.classList.add("empty-note");
+        return;
+      }
+      console.log("About to save note to Supabase");
+      try {
+        const { data, error } = await supabase.from("Notes").insert([
+          {
+            uuid: user?.id,
+            Content: noteContent,
+          },
+        ]);
+
+        if (error) {
+          console.error("Error saving note:", error); // Handle error
+        } else {
+          console.log("Note saved successfully:", data);
+        }
+      } catch (error) {
+        console.error("Error saving note:", error);
+      }
+      editorElement.classList.remove("empty-note");
       setTaskAdded(true);
       setClicked(false);
-      console.log(taskAdded);
     }
   };
 
   return (
     clicked && (
       <Container className="note-container" p={10}>
-        <Container className="editor" ref={editorRef} />
+        <div className="editor" ref={editorRef} />
         <Button
           className="save-note-button"
           onClick={handleSave}
@@ -60,7 +98,11 @@ export const AddNote = ({
           h={40}
           variant="filled"
         >
-          <Flex justify="center" align="center">
+          <Flex
+            justify="center"
+            align="center"
+            className="save-note-button-content"
+          >
             <IconDeviceFloppy size={16} stroke={1.5} />
             <p>Save Note</p>
           </Flex>

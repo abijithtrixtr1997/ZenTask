@@ -1,8 +1,9 @@
 import { Navbar } from "../Navbar/Navbar";
 import { User } from "@supabase/supabase-js";
-import { TaskList } from "../TaskList/TaskList";
+
 import { useState } from "react";
 import { CreateNew } from "../CreateNew";
+import { HomeView } from "../HomeView/HomeView";
 
 export const MainApp = ({ user }: { user: User }) => {
   const [taskAdded, setTaskAdded] = useState<boolean>(false);
@@ -11,11 +12,14 @@ export const MainApp = ({ user }: { user: User }) => {
     <>
       <div className="main-app">
         <Navbar user={user} />
-        <div className="create-new-container">
-          <CreateNew setTaskAdded={setTaskAdded} taskAdded={taskAdded} />
+        <div className="in-main-app">
+          <div className="create-new-container">
+            <CreateNew setTaskAdded={setTaskAdded} taskAdded={taskAdded} />
+          </div>
+          <div className="home-view-container">
+            <HomeView taskAdded={taskAdded} user={user} />
+          </div>
         </div>
-
-        <TaskList user={user} taskAdded={taskAdded} />
       </div>
     </>
   );
