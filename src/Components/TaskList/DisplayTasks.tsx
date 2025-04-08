@@ -96,8 +96,7 @@ export const DisplayTasks = ({
           <span className="done-toggle-display">
             <IconCheck
               size={15}
-              className={`done-icon-${checked}`}
-              done-icon
+              className={checked ? `done-icon-true` : `done-icon-false`}
               color={checked ? "#8f9562" : "#ccc"}
             ></IconCheck>
           </span>
