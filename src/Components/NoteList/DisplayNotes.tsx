@@ -14,10 +14,11 @@ interface DisplayNote {
 
 export const DisplayNotes = ({ note }: DisplayNote) => {
   return (
-    <Container className="display-note" mb={10}>
-      <Container className="note-container" maw={400} bg={"red"} p={10}>
+    <Container className="display-note" mb={10} p={10} maw={400}>
         <Text
-          size="sm"
+          size="xs"
+          fw={700}
+          ta={"left"}
           className="note-display-text"
           style={{
             wordBreak: "break-word", // This ensures long words break to the next line
@@ -29,7 +30,6 @@ export const DisplayNotes = ({ note }: DisplayNote) => {
             __html: DOMPurify.sanitize(note?.Content || ""),
           }}
         />
-      </Container>
     </Container>
   );
 };

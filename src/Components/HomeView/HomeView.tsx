@@ -1,6 +1,7 @@
 import { TaskList } from "../TaskList/TaskList";
 import { User } from "@supabase/supabase-js";
 import { NoteList } from "../NoteList/NoteList";
+import { Flex } from "@mantine/core"; // Import Mantine components
 
 interface HomeViewProps {
   user: User;
@@ -9,12 +10,18 @@ interface HomeViewProps {
 
 export const HomeView = ({ user, taskAdded }: HomeViewProps) => {
   return (
-    <div className="home-view">
-      <h1>Home</h1>
-      <div className="inside-home" style={{ display: "flex" }}>
+    <Flex
+      className="home-view"
+      gap={"lg"}
+      direction="column"
+      align="center"
+      justify="center"
+    >
+      <h1 className="home-title">Your Day</h1>
+      <div className="inside-home" style={{ display: "flex"}}>
         <TaskList user={user} taskAdded={taskAdded} />
         <NoteList user={user} taskAdded={taskAdded} />
       </div>
-    </div>
+    </Flex>
   );
 };

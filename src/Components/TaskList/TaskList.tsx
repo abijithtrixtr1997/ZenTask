@@ -1,16 +1,11 @@
 import { User } from "@supabase/supabase-js";
 import { supabase } from "../../supabaseClient";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DisplayTasks } from "./DisplayTasks";
-
-interface Task {
-  id: string;
-  Title: string;
-  description: string;
-  completed: boolean;
-  created_at: string;
-  uid: string;
-}
+import { Container } from "@mantine/core";
+import { useDispatch, useSelector } from "react-redux";
+import { setTasks } from "../Slices/TodoSlice";
+import { RootState } from "../../Store";
 
 interface TaskListProps {
   user: User;
@@ -18,36 +13,65 @@ interface TaskListProps {
 }
 
 export const TaskList = ({ user, taskAdded }: TaskListProps) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const dispatch = useDispatch(); // Initialize Redux dispatch
+  const [checkedMap, setCheckedMap] = useState<Record<string, boolean>>({}); // Track task checked state
+  const tasks = useSelector((state: RootState) => state.todo.tasks); // Get tasks from Redux state
 
+  // Fetch tasks from Supabase
   useEffect(() => {
     const getTasks = async () => {
       const { data, error } = await supabase
         .from("Todo")
         .select()
         .eq("uid", user?.id);
-      console.log(typeof data);
       if (error) {
         console.error("Error fetching tasks:", error);
       } else {
-        setTasks(data); // Store all task objects instead of just 'task'
+        const checkedTasks = data.filter((task) => task.completed);
+        const uncheckedTasks = data.filter((task) => !task.completed);
+        const reorderedTasks = [...uncheckedTasks, ...checkedTasks]; // Move completed tasks to the bottom
+
+        dispatch(setTasks(reorderedTasks)); // Dispatch reordered tasks to Redux // Dispatch tasks to Redux
       }
     };
 
     getTasks();
-  }, [taskAdded, user]); // Re-fetch when `user` changes
+  }, [taskAdded, user, dispatch]); // Re-fetch tasks when `taskAdded` or `user` changes
 
+  // Update tasks order whenever the checked state changes
   useEffect(() => {
-    console.log("Tasks after update:", tasks);
-  }, [tasks]);
+    const reorderTasks = () => {
+      // Filter checked and unchecked tasks
+      const checkedTasks = tasks.filter((task) => checkedMap[task.id]);
+      const uncheckedTasks = tasks.filter((task) => !checkedMap[task.id]);
+
+      // Reorder tasks: unchecked tasks first, then checked tasks
+      const reorderedTasks = [...uncheckedTasks, ...checkedTasks];
+      dispatch(setTasks(reorderedTasks)); // Dispatch reordered tasks to Redux
+    };
+
+    reorderTasks(); // Call reorder whenever `checkedMap` or `tasks` changes
+  }, [checkedMap]); // Dependency on `checkedMap`, `tasks`, and `dispatch`
+
+  // Handle checkbox change and update checkedMap
+  const handleSetChecked = (id: string, value: boolean) => {
+    setCheckedMap((prev) => ({ ...prev, [id]: value }));
+  };
 
   return (
-    <div>
+    <Container className="task-whole-list">
       {tasks.length > 0 ? (
-        tasks.map((task) => <DisplayTasks key={task?.id} task={task} />)
+        tasks.map((task) => (
+          <DisplayTasks
+            key={task.id}
+            task={task}
+            checked={checkedMap[task.id] || false} // Ensure checked state is used
+            setChecked={(value: boolean) => handleSetChecked(task.id, value)} // Update checked state
+          />
+        ))
       ) : (
         <li>No tasks found</li>
       )}
-    </div>
+    </Container>
   );
 };

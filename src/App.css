@@ -73,15 +73,63 @@ html {
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3); /* Optional: Shadow effect */
 }
 
-.main-app {
-  overflow-y: auto;
-  overflow-x: hidden;
+.individual-task {
+  position: relative;
   width: 100%;
-  max-height: 100%;
+}
+
+.done-toggle {
+  display: none;
+}
+
+.done-icon-true {
+  opacity: 1;
+}
+
+.done-icon-false {
+  opacity: 0;
+  transition:
+    opacity 0.3s ease-in-out,
+    transform 0.2s ease;
+  transform: scale(0.9);
+}
+
+.toggle-checkbox:hover .done-icon,
+.done-icon.checked {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.toggle-checkbox {
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  right: 0%;
+  top: 0%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  padding: 1%;
+  border: 1px solid #8f9562;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.done-toggle-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .in-main-app {
-  scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
   display: flex;
   flex-direction: column;
@@ -94,9 +142,6 @@ html {
 }
 
 /* Remove scrollbar in Webkit-based browsers (Chrome, Safari, Edge) */
-.in-main-app::-webkit-scrollbar {
-  display: none; /* Hides the scrollbar */
-}
 
 :root {
   --button-hover-color: white;
@@ -186,6 +231,18 @@ html {
   transform: scale(1.1);
 }
 
+.main-app.inactive {
+  display: none;
+}
+
+.task-page.inactive {
+  display: none;
+}
+
+.note-page.inactive {
+  display: none;
+}
+
 .leftbar {
   position: absolute;
   top: 0;
@@ -226,16 +283,60 @@ html {
   color: red !important;
 }
 
-.main-app {
+.ql-editor {
+  width: 100% !important;
+  height: auto !important;
+}
+
+.display-task,
+.display-note {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background-color: #f0f2e4;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  transition:
+    transform 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+  will-change: transform;
+  cursor: pointer; /* Optional */
+}
+
+.display-task:hover,
+.display-note:hover {
+  transform: scale(1.01);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.task-whole-list,
+.note-whole-list {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  min-height: 100dvh;
+  width: 100%;
+  height: 100%;
+  gap: 1rem;
+  flex: 50%;
+}
+
+.main-app,
+.task-page,
+.note-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: (100dvh - 4rem);
   box-sizing: border-box;
-  min-width: calc(100% - 6rem);
-  margin-left: 6rem; /* Same as .leftbar width */
+  margin-top: 4rem;
   background-color: #f4ddb8;
+  width: calc(100% - 4rem);
+  margin-left: 4rem;
 }
 
 .add-task-box {
@@ -288,9 +389,31 @@ html {
   height: 100%;
 }
 
-.navbar-container {
+.home-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  height: 4rem;
+  height: 100%;
+}
+
+.home-view-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.home-title {
+  font-size: clamp(1.5rem, 3dvw, 2.5rem);
+  text-align: center;
+  font-weight: 700;
+  text-decoration: underline;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase !important;
 }
 
 .top-navbar {
@@ -300,6 +423,7 @@ html {
   top: 0;
   right: 0;
   width: calc(100% - 6rem);
+  z-index: 100000;
 }
 
 .note-container {
@@ -313,9 +437,14 @@ html {
   position: relative;
 }
 
-.editor {
+.ql-container {
+  height: 20% !important;
+  width: 100% !important;
+}
+
+.editor,
+.note-title-input textarea {
   width: 100%;
-  height: 70% !important;
   display: flex;
   align-items: space-between;
   justify-content: space-between;
@@ -501,6 +630,11 @@ html {
   justify-content: center;
 }
 
+.inside-home {
+  width: 100%;
+  height: 100%;
+}
+
 .inner-login-container {
   border-radius: 12px 0 0 12px;
   display: flex;
@@ -548,7 +682,8 @@ html {
   height: 100%;
   transform: translateX(100%);
   border-radius: 0 12px 12px 0;
-  background: url("./Components/Images/Logo.png") center 30% / 15% no-repeat,
+  background:
+    url("./Components/Images/Logo.png") center 30% / 15% no-repeat,
     linear-gradient(65deg, #a2c2d6, #e2dada); /* Dark-to-light contrast */
 }
 
@@ -558,7 +693,8 @@ html {
   max-width: 100%;
   opacity: 1;
   z-index: 2;
-  transition: max-width 0.3s ease-in-out,
+  transition:
+    max-width 0.3s ease-in-out,
     min-width 0.3s ease-in-out opacity 0.3s ease-in-out;
 }
 

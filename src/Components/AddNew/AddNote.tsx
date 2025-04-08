@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Container, Button, Flex } from "@mantine/core"; // Import Bootstrap components
+import { Container, Button, Flex, TextInput } from "@mantine/core"; // Import Bootstrap components
 import Quill from "quill";
 import "quill/dist/quill.snow.css"; // Import Quill styles
 import { IconDeviceFloppy } from "@tabler/icons-react";
@@ -20,6 +20,7 @@ export const AddNote = ({
   const editorRef = useRef<HTMLDivElement | null>(null);
   const [user, setUser] = useState<User | null>(null); // State to hold user data
   const [quill, setQuill] = useState<Quill | null>(null); // State to hold the Quill instance
+  const [title, setTitle] = useState<string>(""); // State to hold the note title
 
   useEffect(() => {
     if (!quill && editorRef.current) {
@@ -37,7 +38,7 @@ export const AddNote = ({
       });
       setQuill(quillInstance);
     }
-  }, []);
+  }, [quill]);
 
   useEffect(() => {
     const getUser = async () => {
@@ -49,7 +50,7 @@ export const AddNote = ({
     };
     getUser();
     console.log("User:", user);
-  }, []);
+  }, [user]);
 
   const handleSave = async () => {
     if (quill) {
@@ -88,7 +89,15 @@ export const AddNote = ({
 
   return (
     clicked && (
-      <Container className="note-container" p={10}>
+      <Container className="note-container" p={10} pt={60}>
+        <TextInput
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Enter your title here"
+          mb={10} // margin-bottom for spacing
+          w={"100%"} // full width
+          className="note-title-input"
+        />
         <div className="editor" ref={editorRef} />
         <Button
           className="save-note-button"

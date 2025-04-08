@@ -1,4 +1,3 @@
-import { Navbar } from "../Navbar/Navbar";
 import { User } from "@supabase/supabase-js";
 
 import { useState } from "react";
@@ -11,7 +10,6 @@ export const MainApp = ({ user }: { user: User }) => {
   return (
     <>
       <div className="main-app">
-        <Navbar user={user} />
         <div className="in-main-app">
           <div className="create-new-container">
             <CreateNew setTaskAdded={setTaskAdded} taskAdded={taskAdded} />

@@ -41,7 +41,7 @@ export const NoteList = ({ user, taskAdded }: NoteListProps) => {
   }, [notes]);
 
   return (
-    <div style={{ marginTop: "2rem" }}>
+    <div style={{ marginTop: "2rem" }} className="note-whole-list">
       <h1 style={{ marginBottom: "1rem" }}>Notes</h1>
       {notes.length > 0 ? (
         notes.map((note) => <DisplayNotes key={note?.id} note={note} />)
