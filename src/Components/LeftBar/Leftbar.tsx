@@ -1,10 +1,5 @@
 import { Button, Anchor, Flex, Tooltip } from "@mantine/core";
-import {
-  IconCalendar,
-  IconHome,
-  IconListCheck,
-  IconNotes,
-} from "@tabler/icons-react";
+import { IconHome, IconListCheck, IconNotes } from "@tabler/icons-react";
 
 interface LeftBarProps {
   setCurrentPage: (value: string) => void;
