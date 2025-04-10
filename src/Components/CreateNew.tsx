@@ -8,7 +8,7 @@ import {
   Group,
 } from "@mantine/core";
 import {
-  IconCalendarPlus,
+  // IconCalendarPlus,
   IconNote,
   IconPlus,
   IconSquarePlus,
@@ -42,9 +42,6 @@ export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
     } else if (targetClassList.contains("new-task-button")) {
       console.log("New Task button clicked");
       setSelectedItem("newTask");
-    } else if (targetClassList.contains("new-event-button")) {
-      console.log("New Event button clicked");
-      setSelectedItem("newEvent");
     }
   };
 
@@ -122,7 +119,7 @@ export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
                 <p>New Note</p>
               </div>
             </Button>
-            <Button
+            {/* <Button
               variant="filled"
               color="#8f9562"
               size="md"
@@ -139,7 +136,7 @@ export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
 
                 <p>New Event</p>
               </div>
-            </Button>
+            </Button> */}
           </Group>
         </Collapse>
       </Container>

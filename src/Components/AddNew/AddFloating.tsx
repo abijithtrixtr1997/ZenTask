@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { AddEvent } from "./AddEvent";
+// import { AddEvent } from "./AddEvent";
 import { AddNote } from "./AddNote";
 import { AddTask } from "./AddTask";
 import { IconX } from "@tabler/icons-react";
@@ -77,15 +77,15 @@ export const FloatingContainer = ({
             setClicked={setClicked}
           />
         );
-      case "newEvent":
-        return (
-          <AddEvent
-            setTaskAdded={setTaskAdded}
-            taskAdded={taskAdded}
-            clicked={clicked}
-            setClicked={setClicked}
-          />
-        );
+      // case "newEvent":
+      //   return (
+      //     <AddEvent
+      //       setTaskAdded={setTaskAdded}
+      //       taskAdded={taskAdded}
+      //       clicked={clicked}
+      //       setClicked={setClicked}
+      //     />
+      //   );
       default:
         return null;
     }

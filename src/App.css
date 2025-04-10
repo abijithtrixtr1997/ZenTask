@@ -94,7 +94,7 @@ html {
   transform: scale(0.9);
 }
 
-.toggle-checkbox:hover .done-icon,
+.toggle-checkbox:hover .done-icon-false,
 .done-icon.checked {
   opacity: 1;
   transform: scale(1);
@@ -114,6 +114,53 @@ html {
   border: 1px solid #8f9562;
   border-radius: 50%;
   cursor: pointer;
+}
+
+.edit-delete {
+  position: absolute;
+  right: 10%;
+  top: 0%;
+  display: flex;
+  gap: 10%;
+}
+
+.edit-button,
+.delete-button {
+  width: 22px !important;
+  height: 22px !important;
+  padding: 0.5rem 0.5rem;
+  border-radius: 10%;
+  background-color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+}
+
+.edit-icon,
+.delete-icon {
+  position: absolute;
+
+  transition:
+    transform 0.3s ease-in-out,
+    fill 0.3s ease-in-out;
+  scale: 1;
+}
+
+.edit-button:hover .edit-icon,
+.delete-button:hover .delete-icon {
+  transform: scale(1.2);
+  fill: red;
+}
+
+.delete-button:hover .delete-icon {
+  fill: red;
+}
+
+.edit-button:hover .edit-icon {
+  fill: #4a90e2;
+  stroke: #4a90e2;
 }
 
 .done-toggle-display {

@@ -51,9 +51,10 @@ button:hover {
   color: #8f9562;
   border-color: #8f9562;
 }
+
 button:focus,
 button:focus-visible {
-  outline: 1px auto var(--base-color);
+  outline: none;
 }
 
 @media (prefers-color-scheme: light) {

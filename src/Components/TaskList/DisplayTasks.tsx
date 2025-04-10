@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { updateTaskInDB } from "../Slices/TodoSlice";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../Store";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconPencil, IconTrashFilled } from "@tabler/icons-react";
+import { format } from "date-fns";
 
 interface Task {
   id: `${string}-${string}-${string}-${string}-${string}`;
@@ -28,6 +29,7 @@ export const DisplayTasks = ({
 }: DisplayTasksProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
+  const [clicked, setClicked] = useState(false);
 
   const handleCheck = async () => {
     console.log("handleCheck clicked: ", checked);
@@ -58,8 +60,19 @@ export const DisplayTasks = ({
     setChecked(task.completed);
   }, [task.completed]);
 
+  const handleClick = () => {
+    console.log(clicked);
+    setClicked(!clicked);
+  };
+
   return (
-    <Container className="display-task" maw={400} mb={10} p={10}>
+    <Container
+      className="display-task"
+      maw={400}
+      mb={10}
+      p={10}
+      onClick={handleClick}
+    >
       <Flex
         className="individual-task"
         gap="xs"
@@ -79,7 +92,11 @@ export const DisplayTasks = ({
         </Title>
 
         {task.description && <Text size="xs">{task.description}</Text>}
-        {task.Due && <Text size="xs">Due: {task.Due}</Text>}
+        {task.Due && (
+          <Text size="xs">
+            Due: {format(new Date(task.Due), "dd-MM HH:mm")}
+          </Text>
+        )}
         <div
           className="toggle-checkbox"
           onClick={handleCheck}
@@ -100,6 +117,18 @@ export const DisplayTasks = ({
               color={checked ? "#8f9562" : "#ccc"}
             ></IconCheck>
           </span>
+        </div>
+        <div className="edit-delete">
+          <button className="edit-button">
+            <IconPencil className="edit-icon" size={15} color="#8f9562" />
+          </button>
+          <button className="delete-button">
+            <IconTrashFilled
+              className="delete-icon"
+              size={15}
+              color="#8f9562"
+            />
+          </button>
         </div>
       </Flex>
     </Container>
