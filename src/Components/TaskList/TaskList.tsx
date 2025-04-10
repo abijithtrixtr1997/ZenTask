@@ -2,7 +2,7 @@ import { User } from "@supabase/supabase-js";
 import { supabase } from "../../supabaseClient";
 import { useEffect, useState } from "react";
 import { DisplayTasks } from "./DisplayTasks";
-import { Container } from "@mantine/core";
+import { Flex } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import { setTasks } from "../Slices/TodoSlice";
 import { RootState } from "../../Store";
@@ -15,6 +15,7 @@ interface TaskListProps {
 export const TaskList = ({ user, taskAdded }: TaskListProps) => {
   const dispatch = useDispatch(); // Initialize Redux dispatch
   const [checkedMap, setCheckedMap] = useState<Record<string, boolean>>({}); // Track task checked state
+  const [taskDeleted, setTaskDeleted] = useState(false); // Track task]
   const tasks = useSelector((state: RootState) => state.todo.tasks); // Get tasks from Redux state
 
   // Fetch tasks from Supabase
@@ -36,7 +37,7 @@ export const TaskList = ({ user, taskAdded }: TaskListProps) => {
     };
 
     getTasks();
-  }, [taskAdded, user, dispatch]); // Re-fetch tasks when `taskAdded` or `user` changes
+  }, [taskAdded, user, dispatch, taskDeleted]); // Re-fetch tasks when `taskAdded` or `user` changes
 
   // Update tasks order whenever the checked state changes
   useEffect(() => {
@@ -51,7 +52,7 @@ export const TaskList = ({ user, taskAdded }: TaskListProps) => {
     };
 
     reorderTasks(); // Call reorder whenever `checkedMap` or `tasks` changes
-  }, [checkedMap]); // Dependency on `checkedMap`, `tasks`, and `dispatch`
+  }, [checkedMap, taskDeleted]); // Dependency on `checkedMap`, `tasks`, and `dispatch`
 
   // Handle checkbox change and update checkedMap
   const handleSetChecked = (id: string, value: boolean) => {
@@ -59,7 +60,7 @@ export const TaskList = ({ user, taskAdded }: TaskListProps) => {
   };
 
   return (
-    <Container className="task-whole-list">
+    <Flex className="task-whole-list" direction="column" align="flex-start">
       {tasks.length > 0 ? (
         tasks.map((task) => (
           <DisplayTasks
@@ -67,11 +68,13 @@ export const TaskList = ({ user, taskAdded }: TaskListProps) => {
             task={task}
             checked={checkedMap[task.id] || false} // Ensure checked state is used
             setChecked={(value: boolean) => handleSetChecked(task.id, value)} // Update checked state
+            setTaskDeleted={setTaskDeleted}
+            taskDeleted={taskDeleted}
           />
         ))
       ) : (
         <li>No tasks found</li>
       )}
-    </Container>
+    </Flex>
   );
 };

@@ -1,10 +1,12 @@
 import { Checkbox, Container, Flex, Text, Title } from "@mantine/core";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { updateTaskInDB } from "../Slices/TodoSlice";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../Store";
-import { IconCheck, IconPencil, IconTrashFilled } from "@tabler/icons-react";
+import { IconCheck, IconTrashFilled } from "@tabler/icons-react";
 import { format } from "date-fns";
+import { DateTimePicker } from "../Date_And_Time/Time";
+import { deleteTask } from "./DeleteTask";
 
 interface Task {
   id: `${string}-${string}-${string}-${string}-${string}`;
@@ -20,27 +22,56 @@ interface DisplayTasksProps {
   task: Task;
   checked: boolean;
   setChecked: (value: boolean) => void;
+  setTaskDeleted: (value: boolean) => void;
+  taskDeleted: boolean;
 }
 
 export const DisplayTasks = ({
   task,
   checked,
   setChecked,
+  setTaskDeleted,
+  taskDeleted,
 }: DisplayTasksProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
-  const [clicked, setClicked] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(task.Title);
+  const [editDescription, setEditDescription] = useState(
+    task.description ?? ""
+  );
+  const [selectedTime, setSelectedTime] = useState(task.Due ?? "");
+  const [showMoreFields, setShowMoreFields] = useState(false);
+  const editorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setChecked(task.completed);
+  }, [task.completed]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        editorRef.current &&
+        !editorRef.current.contains(event.target as Node)
+      ) {
+        handleSave();
+      }
+    }
+
+    if (isEditing) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isEditing, editTitle, editDescription, selectedTime]);
 
   const handleCheck = async () => {
-    console.log("handleCheck clicked: ", checked);
     const newChecked = !checked;
-    console.log("checked new value: ", newChecked);
     setChecked(newChecked);
-    console.log("Checked value:", checked);
     setLoading(true);
-
     try {
-      console.log("In try block");
       await dispatch(
         updateTaskInDB({
           id: task.id,
@@ -48,7 +79,6 @@ export const DisplayTasks = ({
         })
       );
     } catch (error) {
-      // Revert state if update fails
       setChecked(!newChecked);
       console.error("Failed to update task:", error);
     } finally {
@@ -56,81 +86,146 @@ export const DisplayTasks = ({
     }
   };
 
-  useEffect(() => {
-    setChecked(task.completed);
-  }, [task.completed]);
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
 
-  const handleClick = () => {
-    console.log(clicked);
-    setClicked(!clicked);
+  const handleSave = async () => {
+    console.log("Saving changes...");
+    setTimeout(async () => {
+      setLoading(true);
+      try {
+        const dueToUpdate = selectedTime?.trim()
+          ? new Date(selectedTime).toISOString()
+          : null;
+
+        await dispatch(
+          updateTaskInDB({
+            id: task.id,
+            updates: {
+              Title: editTitle,
+              description: editDescription.trim() || null,
+              Due: dueToUpdate,
+            },
+          })
+        );
+        setIsEditing(false);
+      } catch (err) {
+        console.error("Failed to update task:", err);
+      } finally {
+        setLoading(false);
+      }
+    }, 100);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleSave();
+  };
+
+  const handleDelete = () => {
+    deleteTask(task.id, dispatch, setTaskDeleted, taskDeleted);
   };
 
   return (
-    <Container
-      className="display-task"
-      maw={400}
-      mb={10}
-      p={10}
-      onClick={handleClick}
-    >
-      <Flex
-        className="individual-task"
-        gap="xs"
-        direction="column"
-        align="flex-start"
-      >
-        <Title
-          order={5}
-          className="task-title"
-          style={{
-            wordBreak: "break-word",
-            textTransform: "uppercase",
-            textDecoration: checked ? "line-through" : "none",
-          }}
+    <div className="outer-display-task">
+      <Container className="display-task" maw={400} p={10}>
+        <Flex
+          className="individual-task"
+          gap="xs"
+          direction="column"
+          align="flex-start"
+          onDoubleClick={handleEdit}
         >
-          {task.Title}
-        </Title>
+          <div ref={editorRef}>
+            {isEditing ? (
+              <>
+                <input
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="task-title-input"
+                  autoFocus
+                />
 
-        {task.description && <Text size="xs">{task.description}</Text>}
-        {task.Due && (
-          <Text size="xs">
-            Due: {format(new Date(task.Due), "dd-MM HH:mm")}
-          </Text>
-        )}
-        <div
-          className="toggle-checkbox"
-          onClick={handleCheck}
-          role="checkbox"
-          aria-checked={checked}
-          tabIndex={0}
-        >
-          <Checkbox
-            checked={checked}
-            onChange={handleCheck}
-            disabled={loading}
-            className="done-toggle"
-          />
-          <span className="done-toggle-display">
-            <IconCheck
-              size={15}
-              className={checked ? `done-icon-true` : `done-icon-false`}
-              color={checked ? "#8f9562" : "#ccc"}
-            ></IconCheck>
-          </span>
-        </div>
-        <div className="edit-delete">
-          <button className="edit-button">
-            <IconPencil className="edit-icon" size={15} color="#8f9562" />
-          </button>
-          <button className="delete-button">
-            <IconTrashFilled
-              className="delete-icon"
-              size={15}
-              color="#8f9562"
+                {(editDescription || selectedTime || showMoreFields) && (
+                  <>
+                    <textarea
+                      value={editDescription}
+                      onChange={(e) => setEditDescription(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      className="task-description-input"
+                      placeholder="Add description..."
+                    />
+                    <DateTimePicker setSelectedTime={setSelectedTime} />
+                  </>
+                )}
+
+                {!editDescription && !selectedTime && !showMoreFields && (
+                  <button
+                    className="more-button"
+                    onClick={() => setShowMoreFields(true)}
+                    title="Add description or due date"
+                    onMouseDown={(e) => e.preventDefault()}
+                  >
+                    ⋯
+                  </button>
+                )}
+              </>
+            ) : (
+              <>
+                <Title
+                  order={5}
+                  className="task-title"
+                  style={{
+                    wordBreak: "break-word",
+                    textTransform: "uppercase",
+                    textDecoration: checked ? "line-through" : "none",
+                  }}
+                >
+                  {editTitle}
+                </Title>
+                {editDescription && <Text size="xs">{editDescription}</Text>}
+                {selectedTime && (
+                  <Text size="xs">
+                    Due: {format(new Date(selectedTime), "dd-MM HH:mm")}
+                  </Text>
+                )}
+              </>
+            )}
+          </div>
+          <div
+            className="toggle-checkbox"
+            onClick={handleCheck}
+            role="checkbox"
+            aria-checked={checked}
+            tabIndex={0}
+          >
+            <Checkbox
+              checked={checked}
+              onChange={handleCheck}
+              disabled={loading}
+              className="done-toggle"
             />
-          </button>
-        </div>
-      </Flex>
-    </Container>
+            <span className="done-toggle-display">
+              <IconCheck
+                size={15}
+                className={checked ? `done-icon-true` : `done-icon-false`}
+                color={checked ? "#8f9562" : "#ccc"}
+              />
+            </span>
+          </div>
+
+          <div className="edit-delete">
+            <button className="delete-button" onClick={handleDelete}>
+              <IconTrashFilled
+                className="delete-icon"
+                size={15}
+                color="#8f9562"
+              />
+            </button>
+          </div>
+        </Flex>
+      </Container>
+    </div>
   );
 };

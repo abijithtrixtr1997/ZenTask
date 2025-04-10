@@ -69,7 +69,10 @@ export const updateTaskInDB = createAsyncThunk(
 // Async thunk to delete a task from Supabase
 export const deleteTaskInDB = createAsyncThunk(
   "tasks/deleteTaskInDB",
-  async (id: string, { rejectWithValue }) => {
+  async (
+    id: `${string}-${string}-${string}-${string}-${string}`,
+    { rejectWithValue }
+  ) => {
     if (!id) {
       return rejectWithValue("No task ID provided.");
     }

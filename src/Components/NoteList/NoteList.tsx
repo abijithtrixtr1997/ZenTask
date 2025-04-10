@@ -2,6 +2,7 @@ import { User } from "@supabase/supabase-js";
 import { supabase } from "../../supabaseClient";
 import { useState, useEffect } from "react";
 import { DisplayNotes } from "./DisplayNotes";
+import { Flex } from "@mantine/core";
 
 interface Note {
   id: string;
@@ -41,13 +42,13 @@ export const NoteList = ({ user, taskAdded }: NoteListProps) => {
   }, [notes]);
 
   return (
-    <div style={{ marginTop: "2rem" }} className="note-whole-list">
+    <Flex className="note-whole-list" direction="column" align="flex-start">
       <h1 style={{ marginBottom: "1rem" }}>Notes</h1>
       {notes.length > 0 ? (
         notes.map((note) => <DisplayNotes key={note?.id} note={note} />)
       ) : (
         <li>No notes found</li>
       )}
-    </div>
+    </Flex>
   );
 };

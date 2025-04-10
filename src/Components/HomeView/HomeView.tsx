@@ -16,9 +16,10 @@ export const HomeView = ({ user, taskAdded }: HomeViewProps) => {
       direction="column"
       align="center"
       justify="center"
+      p={20}
     >
       <h1 className="home-title">Your Day</h1>
-      <div className="inside-home" style={{ display: "flex"}}>
+      <div className="inside-home" style={{ display: "flex" }}>
         <TaskList user={user} taskAdded={taskAdded} />
         <NoteList user={user} taskAdded={taskAdded} />
       </div>
