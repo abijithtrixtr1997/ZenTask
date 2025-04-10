@@ -1,5 +1,10 @@
 import { Button, Anchor, Flex, Tooltip } from "@mantine/core";
-import { IconHome, IconListCheck, IconNotes } from "@tabler/icons-react";
+import {
+  IconCalendar,
+  IconHome,
+  IconListCheck,
+  IconNotes,
+} from "@tabler/icons-react";
 
 interface LeftBarProps {
   setCurrentPage: (value: string) => void;
@@ -87,6 +92,27 @@ export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
                 </Button>
               </Tooltip>
             </Anchor>
+            {/* <Anchor w={"100%"}>
+              <Tooltip label="Todo" position="top-end" offset={5}>
+                <Button
+                  variant="subtle"
+                  color="#8f9562"
+                  fullWidth
+                  className="nav-button"
+                  justify="start"
+                  onClick={() => handleNavigation("Calender")}
+                >
+                  <Flex
+                    className="group-link"
+                    align={"center"}
+                    justify={"center"}
+                    gap={"0.5rem"}
+                  >
+                    <IconCalendar />
+                  </Flex>
+                </Button>
+              </Tooltip>
+            </Anchor> */}
           </Flex>
         </div>
       </div>

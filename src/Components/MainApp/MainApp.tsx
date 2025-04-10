@@ -1,12 +1,14 @@
 import { User } from "@supabase/supabase-js";
-
-import { useState } from "react";
 import { CreateNew } from "../CreateNew";
 import { HomeView } from "../HomeView/HomeView";
 
-export const MainApp = ({ user }: { user: User }) => {
-  const [taskAdded, setTaskAdded] = useState<boolean>(false);
+interface MainAppProps {
+  user: User;
+  taskAdded: boolean;
+  setTaskAdded: (value: boolean) => void;
+}
 
+export const MainApp = ({ user, taskAdded, setTaskAdded }: MainAppProps) => {
   return (
     <>
       <div className="main-app">
