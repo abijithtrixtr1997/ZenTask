@@ -11,8 +11,12 @@ export const LogInSignUp = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        position: "relative",
+        background: "transparent",
       }}
     >
+      <div className="login-page-logo"></div>
+
       <div className="inner-login-container">
         <SignIn />
         <SignUp />

@@ -763,6 +763,7 @@ html {
   align-items: center;
   justify-content: center;
   background-color: #ffffff;
+  z-index: 10;
 }
 
 .logo-heading svg {
@@ -815,12 +816,42 @@ html {
     linear-gradient(65deg, #a2c2d6, #e2dada); /* Dark-to-light contrast 
 } */
 
+.login-page-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(25%, -50%);
+  transform: rotate(45deg);
+  width: 200%;
+  height: 200%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  z-index: 1;
+}
+
+.login-page-logo::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-240%, -10%) rotate(90deg);
+  width: 50%;
+  height: 50%;
+  background-color: #666666;
+  z-index: 1; /* send it behind the main logo */
+}
+
+.login-page-logo svg {
+  width: 500%;
+  height: 500%;
+}
+
 .sign-in {
   opacity: 1;
   transform: translateX(0);
-  transition:
-    opacity 0.3s ease-in-out,
-    transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
 }
 
 .sign-up {
@@ -835,9 +866,7 @@ html {
 .sign-in.hidden {
   opacity: 0;
   transform: translateX(-100%);
-  transition:
-    opacity 0.3s ease-in-out,
-    transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
 }
 
 .sign-up.hidden {
