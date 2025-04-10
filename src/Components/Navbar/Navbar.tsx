@@ -23,7 +23,7 @@ export const Navbar = ({ user }: { user: User }) => {
     <>
       <Flex align="center" justify="space-between" className="top-navbar">
         <div className="logo-container">
-          <LogoSVG />
+          <LogoSVG fillColor="#000" />
         </div>
 
         <Title

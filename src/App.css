@@ -228,6 +228,7 @@ html {
   width: 100%;
   height: 100%;
   gap: 0.5rem;
+  position: relative;
 }
 
 .App {
@@ -751,17 +752,29 @@ html {
 }
 
 .inner-login-container {
-  border-radius: 12px 0 0 12px;
-  display: flex;
-  width: clamp(30dvw, 100px);
-  height: 50dvh;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
   position: relative;
-  transform: translateX(-50%);
-  color: #3d0b75;
-  background-color: #cfdee7;
+  min-width: clamp(200px, 70dvw, 400px);
+  min-height: clamp(200px, 70dvh, 500px);
+  box-shadow:
+    2px 2px 5px rgba(0, 0, 0, 0.3),
+    -2px -2px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #ffffff;
+}
+
+.logo-heading svg {
+  width: 24px;
+  height: 24px;
+}
+
+.logo-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .login-method {
@@ -770,7 +783,7 @@ html {
   border-radius: 12px;
 }
 
-.inner-login-container::before {
+/* .inner-login-container::before {
   content: "ZenTask";
   display: flex;
   align-items: center;
@@ -799,49 +812,55 @@ html {
   border-radius: 0 12px 12px 0;
   background:
     url("./Components/Images/Logo.png") center 30% / 15% no-repeat,
-    linear-gradient(65deg, #a2c2d6, #e2dada); /* Dark-to-light contrast */
-}
+    linear-gradient(65deg, #a2c2d6, #e2dada); /* Dark-to-light contrast 
+} */
 
 .sign-in {
-  min-width: 100%;
-  max-height: 90%;
-  max-width: 100%;
   opacity: 1;
-  z-index: 2;
+  transform: translateX(0);
   transition:
-    max-width 0.3s ease-in-out,
-    min-width 0.3s ease-in-out opacity 0.3s ease-in-out;
+    opacity 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
 }
 
 .sign-up {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   opacity: 0;
-  max-height: 0%;
-  max-width: 0%;
-  transition: all 0.3s ease-in-out;
+  transform: translate(50%, -50%);
+  transition: transform 0.3s ease-in-out;
 }
 
 .sign-in.hidden {
-  max-height: 0;
-  height: 0;
-  max-width: 0;
-  min-width: 0;
   opacity: 0;
-  transition: all 0.3s ease-in-out;
+  transform: translateX(-100%);
+  transition:
+    opacity 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
 }
 
-.back-arrow {
-  position: absolute;
-  top: -50%;
-  left: -210%;
+.sign-up.hidden {
+  opacity: 0;
+  transform: translate(50%, -50%);
+  transition: transform 0.3s ease-in-out;
 }
 
 .sign-up.active {
   opacity: 1;
-  height: 90%;
-  max-height: 90%;
-  min-width: 100%;
-  max-width: 100%;
+  transform: translate(-50%, -50%);
   transition: all 0.3s ease-in-out;
+}
+
+.back-arrow-container {
+  position: relative;
+  width: 100%;
+}
+
+.back-arrow {
+  position: absolute;
+  top: 0%;
+  left: 10%;
 }
 
 .username-input,

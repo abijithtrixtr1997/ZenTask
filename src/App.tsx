@@ -23,19 +23,19 @@ export const App = () => {
   });
 
   const theme = createTheme({
-    fontFamily: "Source Code Pro, monospace",
+    fontFamily: "__GeistSans, '__GeistSans_Fallback', sans-serif", // Use your custom font here
     colors: {
       customPrimary: [
-        "#f0f2e4", // 0 - Lightest
-        "#e1e4c8", // 1
-        "#d2d5ac", // 2
-        "#c3c78f", // 3
-        "#b4b873", // 4
-        "#a5aa57", // 5 - Default shade (can be used for primaryColor)
-        "#8f9562", // 6
-        "#7a8152", // 7
-        "#656c41", // 8
-        "#505730", // 9 - Darkest
+        "#ffffff", // 0 - Lightest (White)
+        "#f0f0f0", // 1 - Very light gray
+        "#d9d9d9", // 2 - Light gray
+        "#b3b3b3", // 3 - Medium light gray
+        "#8c8c8c", // 4 - Medium gray
+        "#666666", // 5 - Default shade (can be used for primaryColor, Mid gray)
+        "#4d4d4d", // 6 - Dark gray
+        "#333333", // 7 - Darker gray
+        "#1a1a1a", // 8 - Very dark gray
+        "#000000", // 9 - Darkest (Black)
       ],
     },
     primaryColor: "customPrimary",

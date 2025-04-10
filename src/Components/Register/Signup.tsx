@@ -75,6 +75,7 @@ export const SignUp = () => {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
+        gap: "1rem",
       }}
     >
       <div className="back-arrow-container">

@@ -12,6 +12,7 @@ import { handleSignIn, handleSignUp } from "./signUpFunctions";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
+import { LogoSVG } from "../Images/SVG/SVGs";
 
 export const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -56,8 +57,14 @@ export const SignIn = () => {
 
   return (
     <div className="sign-in">
+      <div className="logo-heading">
+        <LogoSVG fillColor={"#000"} />
+        <Title order={1} size={"xl"} fw={"700"} ta={"center"}>
+          ZenTask
+        </Title>
+      </div>
       <Container className="login-heading">
-        <Title ta="center" order={1} size={"xl"}>
+        <Title ta="center" order={1} size={"lg"}>
           Login
         </Title>
       </Container>
@@ -138,15 +145,15 @@ export const SignIn = () => {
         >
           <Button
             className="google-login-button"
-            size="md"
+            size="xs"
             variant="filled"
             onClick={onGoogleSignIn}
           >
-            <Text size="lg" p={"xs"}>
+            <Text size="xs" p={"xs"}>
               Sign in with Google
             </Text>
             <IconBrandGoogleFilled
-              size={"20"}
+              size={"15"}
               stroke={1}
               className="google-icon"
             />
