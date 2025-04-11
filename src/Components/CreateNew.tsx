@@ -69,7 +69,7 @@ export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
             onClick={() => handleClick()}
             size="lg"
             variant="light"
-            color="#8f9562"
+            color="#000"
             className="create-new-button"
           >
             <Flex
@@ -87,7 +87,7 @@ export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
           <Group className="create-new-collapse">
             <Button
               variant="filled"
-              color="#8f9562"
+              color="#000"
               size="md"
               className="extra-button new-task-button"
               onClick={handleNew}
@@ -104,7 +104,7 @@ export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
             </Button>
             <Button
               variant="filled"
-              color="#8f9562"
+              color="#000"
               size="md"
               className="extra-button new-note-button"
               onClick={handleNew}

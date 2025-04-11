@@ -22,13 +22,13 @@ export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
             direction={"column"}
             gap={"1rem"}
             p={"1rem "}
-            style={{ borderTop: "2px solid #8f9562" }}
+            style={{ borderTop: "2px solid #666666" }}
           >
             <Anchor w={"100%"}>
               <Tooltip label="Home" position="top-end" offset={5}>
                 <Button
                   variant="subtle"
-                  color="#8f9562"
+                  color="#ffffff"
                   fullWidth
                   className="nav-button"
                   justify="start"
@@ -49,7 +49,7 @@ export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
               <Tooltip label="Notes" position="top-end" offset={5}>
                 <Button
                   variant="subtle"
-                  color="#8f9562"
+                  color="#ffffff"
                   fullWidth
                   className="nav-button"
                   justify="start"
@@ -70,7 +70,7 @@ export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
               <Tooltip label="Todo" position="top-end" offset={5}>
                 <Button
                   variant="subtle"
-                  color="#8f9562"
+                  color="#ffffff"
                   fullWidth
                   className="nav-button"
                   justify="start"
@@ -91,7 +91,7 @@ export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
               <Tooltip label="Todo" position="top-end" offset={5}>
                 <Button
                   variant="subtle"
-                  color="#8f9562"
+                  color="#ffffff"
                   fullWidth
                   className="nav-button"
                   justify="start"

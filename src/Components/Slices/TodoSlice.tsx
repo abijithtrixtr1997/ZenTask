@@ -100,6 +100,12 @@ const todoSlice = createSlice({
     setTasks: (state, action: PayloadAction<Task[]>) => {
       state.tasks = action.payload;
     },
+    updateTaskLocally: (state, action) => {
+      const updatedTask = action.payload;
+      state.tasks = state.tasks.map((task) =>
+        task.id === updatedTask.id ? updatedTask : task
+      );
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -152,7 +158,7 @@ const todoSlice = createSlice({
 });
 
 // Export actions for dispatching
-export const { addTask, setTasks } = todoSlice.actions;
+export const { addTask, setTasks, updateTaskLocally } = todoSlice.actions;
 
 // Export the slice reducer
 export default todoSlice.reducer;

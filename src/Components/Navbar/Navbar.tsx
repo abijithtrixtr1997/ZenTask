@@ -23,15 +23,10 @@ export const Navbar = ({ user }: { user: User }) => {
     <>
       <Flex align="center" justify="space-between" className="top-navbar">
         <div className="logo-container">
-          <LogoSVG fillColor="#000" />
+          <LogoSVG fillColor="#fff" />
         </div>
 
-        <Title
-          order={1}
-          style={{ fontSize: "2.8rem" }}
-          ml={"1rem"}
-          c={"#8f9562"}
-        >
+        <Title order={1} style={{ fontSize: "2.8rem" }} ml={"1rem"} c={"#fff"}>
           ZenTask
         </Title>
         <Container className="theme-container" mr={"0.5rem"}>

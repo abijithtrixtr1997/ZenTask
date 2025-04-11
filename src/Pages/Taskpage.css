@@ -1,8 +1,6 @@
 .task-page {
   padding: 2rem;
   min-height: 100vh;
-  background: linear-gradient(to right, #fdfcfb, #e2d1c3);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .task-header {
@@ -22,7 +20,6 @@
 .task-header p {
   margin-top: 0.5rem;
   font-size: 1rem;
-  color: #555555;
 }
 
 .task-list-section {

@@ -59,7 +59,7 @@ html {
   color: black;
   font-family: "Source Code Pro", monospace;
   position: relative;
-  background-color: #f4ddb8;
+  background-color: #fff;
 }
 
 .ql-snow .ql-editor img {
@@ -345,7 +345,7 @@ html {
   width: 100%;
   height: auto;
   border-radius: 12px;
-  background-color: #f0f2e4;
+  background-color: #fff;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
   transition:
     transform 0.3s ease-in-out,
@@ -429,7 +429,7 @@ html {
   height: calc(100dvh - 4rem) !important;
   box-sizing: border-box;
   margin-top: 4rem;
-  background-color: #f4ddb8;
+  background-color: #fff;
   width: calc(100% - 6rem);
   margin-left: 6rem;
 }
@@ -445,6 +445,10 @@ html {
 
 .extra-button p {
   margin-left: 12px;
+}
+
+.extra-button:hover {
+  background-color: #666666 !important;
 }
 
 .task-textarea {
@@ -673,11 +677,11 @@ html {
 }
 
 .create-new-button:hover .button-inner p {
-  color: #8f9562;
+  color: #666666;
 }
 
 .create-new-button:hover {
-  --button-hover-color: #8f9562;
+  --button-hover-color: #666666;
 }
 
 .date-picker {

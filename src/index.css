@@ -15,7 +15,7 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #333333;
   text-decoration: inherit;
 }
 
@@ -49,8 +49,8 @@ button {
 }
 
 button:hover {
-  color: #8f9562;
-  border-color: #8f9562;
+  color: #666666;
+  border-color: #666666;
 }
 
 button:focus,

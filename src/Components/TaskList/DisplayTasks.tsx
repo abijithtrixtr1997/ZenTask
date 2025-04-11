@@ -1,8 +1,8 @@
 import { Checkbox, Container, Flex, Text, Title } from "@mantine/core";
 import { useState, useEffect, useRef } from "react";
-import { updateTaskInDB } from "../Slices/TodoSlice";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../../Store";
+import { updateTaskInDB, updateTaskLocally } from "../Slices/TodoSlice";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../../Store";
 import { IconCheck, IconTrashFilled } from "@tabler/icons-react";
 import { format } from "date-fns";
 import { DateTimePicker } from "../Date_And_Time/Time";
@@ -24,6 +24,8 @@ interface DisplayTasksProps {
   setChecked: (value: boolean) => void;
   setTaskDeleted: (value: boolean) => void;
   taskDeleted: boolean;
+  taskUpdated: boolean;
+  setTaskUpdated: (value: boolean) => void;
 }
 
 export const DisplayTasks = ({
@@ -32,6 +34,8 @@ export const DisplayTasks = ({
   setChecked,
   setTaskDeleted,
   taskDeleted,
+  taskUpdated,
+  setTaskUpdated,
 }: DisplayTasksProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
@@ -43,6 +47,7 @@ export const DisplayTasks = ({
   const [selectedTime, setSelectedTime] = useState(task.Due ?? "");
   const [showMoreFields, setShowMoreFields] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
+  const tasks = useSelector((state: RootState) => state.todo.tasks);
 
   useEffect(() => {
     setChecked(task.completed);
@@ -70,6 +75,12 @@ export const DisplayTasks = ({
   const handleCheck = async () => {
     const newChecked = !checked;
     setChecked(newChecked);
+    setTaskUpdated(!taskUpdated);
+    console.log(checked, "checked from displaytasks");
+    const updatedTask = { ...task, completed: checked };
+    const updatedTasks = tasks.map((t) => (t.id === task.id ? updatedTask : t));
+
+    dispatch(updateTaskLocally(updatedTasks));
     setLoading(true);
     try {
       await dispatch(
@@ -201,8 +212,8 @@ export const DisplayTasks = ({
             tabIndex={0}
           >
             <Checkbox
+              readOnly
               checked={checked}
-              onChange={handleCheck}
               disabled={loading}
               className="done-toggle"
             />
@@ -217,11 +228,7 @@ export const DisplayTasks = ({
 
           <div className="edit-delete">
             <button className="delete-button" onClick={handleDelete}>
-              <IconTrashFilled
-                className="delete-icon"
-                size={15}
-                color="#8f9562"
-              />
+              <IconTrashFilled className="delete-icon" size={15} color="#000" />
             </button>
           </div>
         </Flex>
