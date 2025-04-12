@@ -58,7 +58,29 @@ export const AddNote = ({
 
       console.log("Note content:", noteContent);
       console.log("Plain text content:", plainText); // Log plain text content
-      if (plainText.trim() === "" || noteContent.trim() === "") {
+      console.log("Note content trim:", noteContent.trim());
+      const trimContent = (htmlContent: string) => {
+        if (htmlContent.includes("<img")) {
+          return htmlContent; // Return an empty string if an image is present
+        }
+
+        // Remove all HTML tags
+        const trimmed = htmlContent.replace(/<\/?[^>]+(>|$)/g, "");
+
+        // Trim content by removing the first 3 characters and last 4 characters
+        return trimmed.length > 3
+          ? trimmed.substring(3, trimmed.length - 4).trim()
+          : "";
+      };
+
+      // Get the trimmed content between <p> and </p> tags
+      const trimmedNoteContent = trimContent(noteContent); // Log plain text content
+      console.log(trimmedNoteContent, "trimContent");
+      if (
+        plainText.trim() === "" &&
+        (trimmedNoteContent.trim() === "" ||
+          trimmedNoteContent.trim() === "<br>")
+      ) {
         console.log("if clause works");
         editorElement.classList.add("empty-note");
         return;
