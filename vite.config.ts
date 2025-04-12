@@ -15,6 +15,11 @@ export default defineConfig(({ mode }) => {
       "import.meta.env.VITE_SUPABASE_ANON_KEY": JSON.stringify(
         env.VITE_SUPABASE_ANON_KEY
       ),
+      // Define Gemini key
+      "import.meta.env.VITE_GEMINI_KEY": JSON.stringify(env.VITE_GEMINI_KEY),
+
+      // Define global for polyfill
+      global: "globalThis",
     },
   };
 });

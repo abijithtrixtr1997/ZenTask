@@ -30,7 +30,6 @@ export const AddNote = ({
         modules: {
           toolbar: [
             ["bold", "italic", "underline"],
-            [{ list: "ordered" }, { list: "bullet" }],
             ["link", "image"],
             ["clean"],
           ],
@@ -49,7 +48,6 @@ export const AddNote = ({
       return data.user;
     };
     getUser();
-    console.log("User:", user);
   }, [user]);
 
   const handleSave = async () => {
@@ -60,7 +58,8 @@ export const AddNote = ({
 
       console.log("Note content:", noteContent);
       console.log("Plain text content:", plainText); // Log plain text content
-      if (plainText.trim() === "" && noteContent.trim() === "") {
+      if (plainText.trim() === "" || noteContent.trim() === "") {
+        console.log("if clause works");
         editorElement.classList.add("empty-note");
         return;
       }
@@ -98,7 +97,10 @@ export const AddNote = ({
           w={"100%"} // full width
           className="note-title-input"
         />
-        <div className="editor" ref={editorRef} />
+        <div className="toolbar-editor">
+          <div className="editor" ref={editorRef} />
+        </div>
+
         <Button
           className="save-note-button"
           onClick={handleSave}

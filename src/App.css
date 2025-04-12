@@ -70,7 +70,7 @@ html {
   /* Optional: Removes inline gaps */
   margin: 10px auto; /* Optional: Adds spacing */
   border-radius: 2px; /* Optional: Rounded corners */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3); /* Optional: Shadow effect */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Shadow effect */
 }
 
 .individual-task {
@@ -333,7 +333,7 @@ html {
 
 .ql-editor {
   width: 100% !important;
-  height: auto !important;
+  height: 100% !important;
 }
 
 .display-task,
@@ -418,6 +418,100 @@ html {
   font-size: 0.85rem;
 }
 
+.instant-note {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.note-arrow-group {
+  width: min(400px, 100%);
+  border-radius: 2px;
+  position: relative;
+}
+
+.instant-title input,
+.instant-description input {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: none;
+  border-radius: 0px;
+}
+
+.instant-description {
+  /* position: absolute; */
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  transition:
+    transform 0.3s ease-in-out,
+    z-index 0.3s ease-in-out;
+}
+
+.instant-description.active {
+  transform: translateY(100%);
+  z-index: 1;
+  transition:
+    transform 0.3s ease-in-out,
+    z-index 0.3s ease-in-out;
+}
+
+.ql-toolbar.ql-snow {
+  border: none !important;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 2px;
+}
+
+.ql-formats button {
+  all: unset; /* Reset all inherited styles */
+  /* Now you can define your custom button styles */
+  width: 1rem !important;
+  height: 1rem !important;
+  border-radius: 2px !important;
+  padding: 0.3rem !important;
+}
+
+.ql-formats button:hover {
+  all: unset; /* Reset all inherited styles */
+  /* Now you can define your custom button styles */
+  border: none !important;
+  box-shadow:
+    inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+    inset -2px -2px 5px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ql-formats button:hover .ql-fill {
+  all: unset; /* Reset all inherited styles */
+  /* Now you can define your custom button styles */
+  fill: rgba(0, 0, 0, 0.5) !important;
+}
+
+.ql-stroke {
+  stroke: rgba(10, 10, 10, 0.5) !important;
+}
+
+.toolbar-editor {
+  display: flex;
+  gap: 0;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.ql-formats {
+  display: flex !important;
+  margin: 0 !important;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .calender-page,
 .main-app,
 .task-page,
@@ -432,6 +526,7 @@ html {
   background-color: #fff;
   width: calc(100% - 6rem);
   margin-left: 6rem;
+  overflow-y: auto;
 }
 
 .add-task-box {
@@ -537,19 +632,27 @@ html {
 }
 
 .ql-container {
-  height: 20% !important;
+  height: 70% !important;
   width: 100% !important;
+  width: 100%;
+  display: flex;
+  align-items: space-between;
+  justify-content: space-between;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  background-color: #fff;
 }
 
-.editor,
 .note-title-input textarea {
   width: 100%;
   display: flex;
   align-items: space-between;
   justify-content: space-between;
   border-radius: 12px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-  background-color: #f0f2e4;
+  box-shadow:
+    2px 2px 5px rgba(0, 0, 0, 0.3),
+    -2px -2px 5px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
@@ -647,7 +750,7 @@ html {
   position: relative;
   height: clamp(60%, 200px, 95%);
   width: clamp(60%, 200px, 95%);
-  background-color: #f0f2e4;
+  background-color: #fff;
   border-radius: 12px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
   display: flex;

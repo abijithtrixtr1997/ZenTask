@@ -160,7 +160,7 @@ export const Home = ({ user }: { user: User }) => {
               setTaskUpdated={setTaskAdded}
             />
           ) : currentPage === "Note" ? (
-            <NotePage />
+            <NotePage user={user} />
           ) : null}
           {/* <Calendar /> */}
         </div>

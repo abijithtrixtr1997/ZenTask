@@ -13,10 +13,9 @@ interface Note {
 
 interface NoteListProps {
   user: User;
-  taskAdded: boolean;
 }
 
-export const NoteList = ({ user, taskAdded }: NoteListProps) => {
+export const NoteList = ({ user }: NoteListProps) => {
   const [notes, setNotes] = useState<Note[]>([]);
 
   useEffect(() => {
@@ -35,14 +34,19 @@ export const NoteList = ({ user, taskAdded }: NoteListProps) => {
     };
 
     getNotes();
-  }, [taskAdded, user]); // Re-fetch when `user` changes
+  }, [user]); // Re-fetch when `user` changes
 
   useEffect(() => {
     console.log("Notes after update:", notes);
   }, [notes]);
 
   return (
-    <Flex className="note-whole-list" direction="column" align="flex-start">
+    <Flex
+      className="note-whole-list"
+      direction="column"
+      align="flex-start"
+      p={20}
+    >
       <h1 style={{ marginBottom: "1rem" }}>Notes</h1>
       {notes.length > 0 ? (
         notes.map((note) => <DisplayNotes key={note?.id} note={note} />)

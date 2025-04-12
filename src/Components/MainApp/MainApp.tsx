@@ -34,9 +34,10 @@ export const MainApp = ({
   homeTasks,
   setHomeTasks,
 }: MainAppProps) => {
+  const VITE_GEMINI_API_KEY: string = import.meta.env.VITE_GEMINI_API_KEY!;
   const [question, setQuestion] = useState<string>("");
   const ai = new GoogleGenAI({
-    apiKey: "AIzaSyD6qx0XLi0wlvRtvXmUIuzmj1s9TeVyC8s",
+    apiKey: VITE_GEMINI_API_KEY,
   });
 
   useEffect(() => {
