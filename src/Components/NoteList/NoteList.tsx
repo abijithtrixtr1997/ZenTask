@@ -13,9 +13,10 @@ interface Note {
 
 interface NoteListProps {
   user: User;
+  noteAdded: boolean;
 }
 
-export const NoteList = ({ user }: NoteListProps) => {
+export const NoteList = ({ user, noteAdded }: NoteListProps) => {
   const [notes, setNotes] = useState<Note[]>([]);
 
   useEffect(() => {
@@ -37,8 +38,26 @@ export const NoteList = ({ user }: NoteListProps) => {
   }, [user]); // Re-fetch when `user` changes
 
   useEffect(() => {
-    console.log("Notes after update:", notes);
-  }, [notes]);
+    const getNotes = async () => {
+      console.log("Fetching notes for user:", user?.id);
+      const { data, error } = await supabase
+        .from("Notes")
+        .select()
+        .eq("uuid", user?.id);
+      console.log(typeof data);
+      if (error) {
+        console.error("Error fetching tasks:", error);
+      } else {
+        setNotes(data); // Store all task objects instead of just 'task'
+      }
+    };
+
+    const timeout = setTimeout(() => {
+      getNotes();
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [noteAdded]); // Re-fetch when `user` changes
 
   return (
     <Flex

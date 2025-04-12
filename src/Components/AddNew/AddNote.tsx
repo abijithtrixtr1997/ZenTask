@@ -68,6 +68,7 @@ export const AddNote = ({
         const { data, error } = await supabase.from("Notes").insert([
           {
             uuid: user?.id,
+            Title: title,
             Content: noteContent,
           },
         ]);

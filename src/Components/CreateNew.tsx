@@ -14,7 +14,7 @@ import {
   IconSquarePlus,
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FloatingContainer } from "./AddNew/AddFloating";
 
 interface AddTaskProps {
@@ -44,10 +44,6 @@ export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
       setSelectedItem("newTask");
     }
   };
-
-  useEffect(() => {
-    console.log("FloatingContainer received: ", { clicked, selectedItem });
-  }, [clicked, selectedItem]);
 
   return (
     <Box className="create-new-box">
