@@ -330,9 +330,14 @@ html {
 }
 
 .all-notes {
-  column-count: 3; /* Or however many columns you want */
+  column-width: 300px; /* This is the *minimum* width of each column */
   column-gap: 16px;
   width: 100%;
+}
+
+.all-notes > * {
+  break-inside: avoid;
+  margin-bottom: 16px; /* for spacing between "rows" */
 }
 
 .display-task {
