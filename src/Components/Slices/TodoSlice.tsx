@@ -1,15 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { supabase } from "../../supabaseClient";
-
-interface Task {
-  id: `${string}-${string}-${string}-${string}-${string}`;
-  uid: string | undefined;
-  Title: string;
-  description: string | null;
-  completed: boolean;
-  created_at: string;
-  Due: string | null;
-}
+import { Task } from "../../types";
 
 interface TodoState {
   tasks: Task[];
@@ -56,12 +47,13 @@ export const updateTaskInDB = createAsyncThunk(
     const { data, error } = await supabase
       .from("Todo")
       .update(updates)
-      .eq("id", id);
+      .eq("id", id)
+      .select();
 
     if (error) {
       return rejectWithValue(error.message);
     }
-
+    console.log(data, "Async Thunk");
     return data; // Supabase returns an array with the updated task
   }
 );
@@ -81,6 +73,7 @@ export const deleteTaskInDB = createAsyncThunk(
     if (error) {
       return rejectWithValue(error.message);
     }
+    console.log(data);
 
     return data; // Supabase returns an array with the deleted task
   }
@@ -105,6 +98,10 @@ const todoSlice = createSlice({
       state.tasks = state.tasks.map((task) =>
         task.id === updatedTask.id ? updatedTask : task
       );
+    },
+    deleteTaskLocally: (state, action) => {
+      const taskIdToDelete = action.payload;
+      state.tasks = state.tasks.filter((task) => task.id !== taskIdToDelete);
     },
   },
   extraReducers: (builder) => {

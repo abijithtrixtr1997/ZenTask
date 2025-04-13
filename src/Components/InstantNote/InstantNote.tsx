@@ -11,10 +11,12 @@ interface instantNoteProps {
 
 export const InstantNote = ({ noteAdded, setNoteAdded }: instantNoteProps) => {
   const [clicked, setClicked] = useState<boolean>(false);
+  const [clickedForNewNote, setClickedForNewNote] = useState<boolean>(false);
   const selectedItem = "newNote";
 
   const handleNewNote = () => {
     setClicked(true);
+    setClickedForNewNote(true);
   };
 
   return (
@@ -25,6 +27,7 @@ export const InstantNote = ({ noteAdded, setNoteAdded }: instantNoteProps) => {
           size="xs"
           placeholder="Click to Add New Note..."
           onClick={() => handleNewNote()}
+          readOnly
         />
       </div>
       {clicked && (
@@ -32,6 +35,8 @@ export const InstantNote = ({ noteAdded, setNoteAdded }: instantNoteProps) => {
           <FloatingContainer
             setTaskAdded={setNoteAdded}
             taskAdded={noteAdded}
+            clickedForNewNote={clickedForNewNote}
+            setClickedForNewNote={setClickedForNewNote}
             clicked={clicked}
             setClicked={setClicked}
             selectedItem={selectedItem} // Pass the selected item to FloatingContainer

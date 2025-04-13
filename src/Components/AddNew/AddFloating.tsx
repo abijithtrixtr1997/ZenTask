@@ -10,6 +10,8 @@ interface FloatingContainerProps {
   clicked: boolean; // Function to notify the parent that task was added
   setClicked: (clicked: boolean) => void;
   selectedItem: string | null;
+  clickedForNewNote: boolean;
+  setClickedForNewNote: (value: boolean) => void;
 }
 
 export const FloatingContainer = ({
@@ -18,6 +20,8 @@ export const FloatingContainer = ({
   clicked,
   setClicked,
   selectedItem,
+  clickedForNewNote,
+  setClickedForNewNote,
 }: FloatingContainerProps) => {
   const floatref = useRef<HTMLDivElement | null>(null);
 
@@ -72,9 +76,12 @@ export const FloatingContainer = ({
       case "newNote":
         return (
           <AddNote
+            taskAdded={taskAdded}
             setTaskAdded={setTaskAdded}
             clicked={clicked}
             setClicked={setClicked}
+            clickedForNewNote={clickedForNewNote}
+            setClickedForNewNote={setClickedForNewNote}
           />
         );
       // case "newEvent":

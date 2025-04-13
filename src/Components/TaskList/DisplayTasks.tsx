@@ -7,16 +7,7 @@ import { IconCheck, IconTrashFilled } from "@tabler/icons-react";
 import { format } from "date-fns";
 import { DateTimePicker } from "../Date_And_Time/Time";
 import { deleteTask } from "./DeleteTask";
-
-interface Task {
-  id: `${string}-${string}-${string}-${string}-${string}`;
-  uid: string | undefined;
-  Title: string;
-  description: string | null;
-  completed: boolean;
-  created_at: string;
-  Due: string | null;
-}
+import { Task } from "../../types";
 
 interface DisplayTasksProps {
   task: Task;

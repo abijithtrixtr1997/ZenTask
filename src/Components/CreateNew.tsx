@@ -25,6 +25,7 @@ interface AddTaskProps {
 export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
   const [clicked, setClicked] = useState(false);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [clickedForNewNote, setClickedForNewNote] = useState<boolean>(false);
 
   const [opened, { toggle }] = useDisclosure(false);
 
@@ -39,6 +40,7 @@ export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
     if (targetClassList.contains("new-note-button")) {
       console.log("New Note button clicked");
       setSelectedItem("newNote");
+      setClickedForNewNote(true);
     } else if (targetClassList.contains("new-task-button")) {
       console.log("New Task button clicked");
       setSelectedItem("newTask");
@@ -143,6 +145,8 @@ export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
             taskAdded={taskAdded}
             clicked={clicked}
             setClicked={setClicked}
+            clickedForNewNote={clickedForNewNote}
+            setClickedForNewNote={setClickedForNewNote}
             selectedItem={selectedItem} // Pass the selected item to FloatingContainer
           />
         </div>

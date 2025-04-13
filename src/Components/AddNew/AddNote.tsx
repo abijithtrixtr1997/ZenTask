@@ -8,14 +8,20 @@ import { User } from "@supabase/supabase-js";
 
 interface AddNoteProps {
   setTaskAdded: (taskAdded: boolean) => void;
+  taskAdded: boolean;
   clicked: boolean; // Function to notify the parent that task was added
   setClicked: (clicked: boolean) => void;
+  clickedForNewNote: boolean;
+  setClickedForNewNote: (value: boolean) => void;
 }
 
 export const AddNote = ({
   setTaskAdded,
   clicked,
   setClicked,
+  taskAdded,
+  clickedForNewNote,
+  setClickedForNewNote,
 }: AddNoteProps) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const [user, setUser] = useState<User | null>(null); // State to hold user data
@@ -78,6 +84,7 @@ export const AddNote = ({
       console.log(trimmedNoteContent, "trimContent");
       if (
         plainText.trim() === "" &&
+        title === "" &&
         (trimmedNoteContent.trim() === "" ||
           trimmedNoteContent.trim() === "<br>")
       ) {
@@ -104,8 +111,9 @@ export const AddNote = ({
         console.error("Error saving note:", error);
       }
       editorElement.classList.remove("empty-note");
-      setTaskAdded(true);
+      setTaskAdded(!taskAdded);
       setClicked(false);
+      setClickedForNewNote(false);
     }
   };
 
@@ -119,6 +127,7 @@ export const AddNote = ({
           mb={10} // margin-bottom for spacing
           w={"100%"} // full width
           className="note-title-input"
+          autoFocus={clickedForNewNote}
         />
         <div className="toolbar-editor">
           <div className="editor" ref={editorRef} />

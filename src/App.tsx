@@ -1,7 +1,6 @@
 import { Provider } from "react-redux";
 import "./App.css";
 import { useState, useEffect } from "react";
-import { configureStore } from "@reduxjs/toolkit";
 import { MantineProvider, createTheme, Button } from "@mantine/core";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { LogInSignUp as Login } from "./Pages/LogInSignUp";
@@ -11,17 +10,9 @@ import { User } from "@supabase/supabase-js";
 import { Home } from "./Pages/Home";
 import classes from "./App.module.css";
 import "@fontsource/source-code-pro/400.css";
-import todoReducer from "./Components/Slices/TodoSlice";
-import noteReducer from "./Components/Slices/NoteSlice";
+import { store } from "./Store";
 
 export const App = () => {
-  const store = configureStore({
-    reducer: {
-      todo: todoReducer,
-      note: noteReducer,
-    },
-  });
-
   const theme = createTheme({
     fontFamily: "__GeistSans, '__GeistSans_Fallback', sans-serif", // Use your custom font here
     colors: {

@@ -3,6 +3,7 @@ import { Flex } from "@mantine/core"; // Import Mantine components
 import { useEffect, useState } from "react";
 import { DisplayTasks } from "../TaskList/DisplayTasks";
 import { supabase } from "../../supabaseClient";
+import { Task } from "../../types";
 
 interface HomeViewProps {
   user: User;
@@ -11,16 +12,6 @@ interface HomeViewProps {
   homeTasks: Task[];
   setHomeTasks: (value: Task[]) => void;
   taskAdded: boolean;
-}
-
-interface Task {
-  id: `${string}-${string}-${string}-${string}-${string}`;
-  uid: string | undefined;
-  Title: string;
-  description: string | null;
-  completed: boolean;
-  created_at: string;
-  Due: string | null;
 }
 
 export const HomeView = ({

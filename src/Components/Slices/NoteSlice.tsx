@@ -1,12 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { supabase } from "../../supabaseClient";
-
-interface Note {
-  id: `${string}-${string}-${string}-${string}-${string}`;
-  uid: string | undefined;
-  Content: string;
-  created_at: string;
-}
+import { Note } from "../../types";
 
 interface NoteState {
   notes: Note[];
@@ -21,6 +15,64 @@ const initialState: NoteState = {
   notes: [],
 };
 
+export const insertNoteInDB = createAsyncThunk(
+  "notes/insertNotes",
+  async (notes: Note[], { rejectWithValue }) => {
+    if (!notes || notes.length === 0) {
+      return rejectWithValue("Nothing to insert.");
+    }
+    const { data, error } = await supabase.from("Notes").insert(notes);
+    if (error) {
+      return rejectWithValue(error.message);
+    }
+
+    return data;
+  }
+);
+
+export const updateNoteInDB = createAsyncThunk(
+  "notes/updateNoteInDB",
+  async (noteUpdate: NoteUpdate, { rejectWithValue }) => {
+    const { id, updates } = noteUpdate;
+    if (!id || !updates) {
+      return rejectWithValue("Invalid Note update data");
+    }
+    const { data, error } = await supabase
+      .from("Notes")
+      .update(updates)
+      .eq("id", id);
+    if (error) {
+      return rejectWithValue(error.message);
+    }
+
+    return data;
+  }
+);
+
+export const deleteNoteInDB = createAsyncThunk(
+  "notes/deleteNoteInDB",
+  async (
+    id: `${string}-${string}-${string}-${string}-${string}`,
+    { rejectWithValue }
+  ) => {
+    if (!id) {
+      return rejectWithValue("No note id provided.");
+    }
+
+    const { data, error } = await supabase
+      .from("Notes")
+      .delete()
+      .eq("id", id)
+      .select();
+    if (error) {
+      return rejectWithValue(error.message);
+    }
+    console.log("Note state updated");
+    console.log("Supabase delete response:", data);
+    return data;
+  }
+);
+
 const noteSlice = createSlice({
   name: "note",
   initialState,
@@ -30,20 +82,61 @@ const noteSlice = createSlice({
     },
     setNotes: (state, action: PayloadAction<Note[]>) => {
       state.notes = action.payload;
-      supabase.from("Notes").insert(action.payload);
     },
-    updateNote: (state, action: PayloadAction<NoteUpdate>) => {
-      const { id, updates } = action.payload;
-      const index = state.notes.findIndex((note) => note.id === id);
-      if (index !== -1) {
-        state.notes[index] = { ...state.notes[index], ...updates };
-        supabase.from("Notes").update(updates).eq("id", id);
-      }
+    updateNote: (state, action) => {
+      const updatedNote = action.payload;
+      state.notes = state.notes.map((note) => {
+        return note.id === updatedNote.id ? updatedNote : note;
+      });
     },
     deleteNote: (state, action: PayloadAction<string>) => {
       state.notes = state.notes.filter((note) => note.id !== action.payload);
-      supabase.from("Notes").delete().eq("id", action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(insertNoteInDB.fulfilled, (state, action) => {
+        const notes = action.payload;
+        if (Array.isArray(notes)) {
+          state.notes = [...state.notes, ...notes];
+        }
+      })
+      .addCase(insertNoteInDB.rejected, (state, action) => {
+        console.error("Error inserting note:", action.payload);
+        console.log("State before insertion:", state.notes);
+      })
+      .addCase(updateNoteInDB.fulfilled, (state, action) => {
+        if (action.payload && Array.isArray(action.payload)) {
+          const updatedNote = action.payload[0] as Note;
+          const index = state.notes.findIndex(
+            (note) => note.id === updatedNote.id
+          );
+          if (index !== -1) {
+            state.notes[index] = updatedNote;
+          }
+        }
+      })
+      .addCase(updateNoteInDB.rejected, (state, action) => {
+        console.error("Error updating note:", action.payload);
+        console.log("State before updation:", state.notes);
+      })
+      .addCase(deleteNoteInDB.fulfilled, (state, action) => {
+        if (action.payload && Array.isArray(action.payload)) {
+          const deletedNoteId = (action.payload[0] as Note)?.id; // Supabase returns an array of the deleted task
+          if (deletedNoteId) {
+            state.notes = state.notes.filter(
+              (task) => task.id !== deletedNoteId
+            );
+            console.log("Note deleted successfully:", deletedNoteId);
+          }
+        } else {
+          console.error("Payload format is not as expected:", action.payload);
+        }
+      })
+      .addCase(deleteNoteInDB.rejected, (state, action) => {
+        console.error("Error deleting task:", action.payload);
+        console.log("State before deletion:", state.notes);
+      });
   },
 });
 

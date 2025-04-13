@@ -195,13 +195,6 @@ html {
   --input-padding-inline-start: 1rem;
 }
 
-.note-display-text img {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
 .create-new-container {
   width: 100%;
   display: flex;
@@ -336,13 +329,19 @@ html {
   height: 100% !important;
 }
 
-.display-task,
-.display-note {
+.all-notes {
+  column-count: 3; /* Or however many columns you want */
+  column-gap: 16px;
+  width: 100%;
+}
+
+.display-task {
+  break-inside: avoid;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  width: 100%;
+  width: 300px;
   height: auto;
   border-radius: 12px;
   background-color: #fff;
@@ -354,8 +353,7 @@ html {
   cursor: pointer; /* Optional */
 }
 
-.display-task:hover,
-.display-note:hover {
+.display-task:hover {
   transform: scale(1.01);
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.35);
 }
