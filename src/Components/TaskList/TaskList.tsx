@@ -9,9 +9,6 @@ import { useSelector } from "react-redux";
 
 interface TaskListProps {
   user: User;
-  taskAdded: boolean;
-  taskUpdated: boolean;
-  setTaskUpdated: (value: boolean) => void;
 }
 
 export const TaskList = ({ user }: TaskListProps) => {

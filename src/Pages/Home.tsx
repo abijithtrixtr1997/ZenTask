@@ -23,8 +23,6 @@ interface Task {
 
 export const Home = ({ user }: { user: User }) => {
   const [currentPage, setCurrentPage] = useState<string>("Main");
-  const [taskAdded, setTaskAdded] = useState<boolean>(false);
-  const [taskUpdated, setTaskUpdated] = useState<boolean>(false);
   const tasks = useSelector((state: RootState) => state.todo.tasks);
   const [homeTasks, setHomeTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,9 +38,7 @@ export const Home = ({ user }: { user: User }) => {
       if (error) {
         console.error("Error fetching tasks:", error);
       } else {
-        const checkedTasks = data.filter((task) => task.completed);
-        const uncheckedTasks = data.filter((task) => !task.completed);
-        dispatch(setTasks([...uncheckedTasks, ...checkedTasks]));
+        dispatch(setTasks(data));
         setLoading(false); // Set loading to false once tasks are fetched
       }
     };
@@ -52,6 +48,7 @@ export const Home = ({ user }: { user: User }) => {
 
   useEffect(() => {
     const getHomeTasks = () => {
+      console.log("in Homepage useEffect!!");
       const oneDay = 24 * 60 * 60 * 1000;
       const today = new Date();
       const tomorrow = new Date(today.getTime() + oneDay);
@@ -134,20 +131,11 @@ export const Home = ({ user }: { user: User }) => {
           ) : currentPage === "Main" ? (
             <MainApp
               user={user}
-              taskAdded={taskAdded}
-              setTaskAdded={setTaskAdded}
-              taskUpdated={taskUpdated}
-              setTaskUpdated={setTaskUpdated}
               homeTasks={homeTasks}
               setHomeTasks={setHomeTasks}
             />
           ) : currentPage === "Task" ? (
-            <Taskpage
-              user={user}
-              taskAdded={taskAdded}
-              taskUpdated={taskAdded}
-              setTaskUpdated={setTaskAdded}
-            />
+            <Taskpage user={user} />
           ) : currentPage === "Note" ? (
             <NotePage user={user} />
           ) : null}

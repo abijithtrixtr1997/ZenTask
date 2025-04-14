@@ -21,8 +21,9 @@ import { User } from "@supabase/supabase-js";
 import { useDisclosure } from "@mantine/hooks";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
-import { addTask } from "../Slices/TodoSlice";
+import { insertTasks } from "../Slices/TodoSlice";
 import { DateTimePicker } from "../Date_And_Time/Time";
+import { AppDispatch } from "../../Store";
 
 const schema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -61,7 +62,7 @@ interface AddTaskProps {
 }
 
 export const AddTask = ({ clicked, setClicked }: AddTaskProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [descOpened, { toggle: toggleDesc }] = useDisclosure(false);
   const [clockOpened, { toggle: toggleClock }] = useDisclosure(false);
   const [user, setUser] = useState<User | null>(null);
@@ -72,7 +73,6 @@ export const AddTask = ({ clicked, setClicked }: AddTaskProps) => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -89,29 +89,28 @@ export const AddTask = ({ clicked, setClicked }: AddTaskProps) => {
   }, []);
 
   const onSubmit: SubmitHandler<dataToSend> = async (data: dataToSend) => {
-    try {
-      const newTask = {
-        id: crypto.randomUUID(),
-        uid: user?.id,
-        Title: data.title,
-        description: data.description || "",
-        completed: false,
-        created_at: new Date().toISOString(),
-        Due: formattedTime ? formattedTime : null,
-      };
+    if (user) {
+      try {
+        const newTask = {
+          id: crypto.randomUUID(),
+          uid: user.id,
+          Title: data.title,
+          description: data.description || "",
+          completed: false,
+          created_at: new Date().toISOString(),
+          Due: formattedTime ? formattedTime : null,
+        };
 
-      dispatch(addTask(newTask));
-      await supabase.from("Todo").insert([newTask]);
+        dispatch(insertTasks(newTask));
+        if (newTask.description) toggleDesc();
 
-      reset();
-      if (data.description) toggleDesc();
-
-      setClicked(false);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("Supabase Error:", err.message);
-      } else {
-        console.error("An unknown error occurred", err);
+        setClicked(false);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error("Supabase Error:", err.message);
+        } else {
+          console.error("An unknown error occurred", err);
+        }
       }
     }
   };

@@ -8,10 +8,6 @@ import { Task } from "../../types";
 
 interface MainAppProps {
   user: User;
-  taskAdded: boolean;
-  setTaskAdded: (value: boolean) => void;
-  taskUpdated: boolean;
-  setTaskUpdated: (value: boolean) => void;
   homeTasks: Task[];
   setHomeTasks: (value: Task[]) => void;
 }

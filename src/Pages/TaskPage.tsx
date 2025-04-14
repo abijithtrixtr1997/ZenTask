@@ -4,17 +4,9 @@ import "./Taskpage.css";
 
 interface TaskpageProps {
   user: User;
-  taskAdded: boolean;
-  setTaskUpdated: (value: boolean) => void;
-  taskUpdated: boolean;
 }
 
-export const Taskpage = ({
-  user,
-  taskAdded,
-  setTaskUpdated,
-  taskUpdated,
-}: TaskpageProps) => {
+export const Taskpage = ({ user }: TaskpageProps) => {
   return (
     <div className="task-page">
       <header className="task-header">
@@ -26,12 +18,7 @@ export const Taskpage = ({
         <p>Here's what's on your plate today. Let’s get things done!</p>
       </header>
       <section className="task-list-section">
-        <TaskList
-          user={user}
-          taskAdded={taskAdded}
-          taskUpdated={taskUpdated}
-          setTaskUpdated={setTaskUpdated}
-        />
+        <TaskList user={user} />
       </section>
     </div>
   );

@@ -18,13 +18,13 @@ const initialState: TodoState = {
 // Async thunk to insert tasks into Supabase
 export const insertTasks = createAsyncThunk(
   "tasks/insertTasks",
-  async (tasks: Task[], { rejectWithValue }) => {
+  async (tasks: Task, { rejectWithValue }) => {
     // Validate that tasks is not empty or null
-    if (!tasks || tasks.length === 0) {
+    if (!tasks) {
       return rejectWithValue("No tasks to insert.");
     }
 
-    const { data, error } = await supabase.from("Todo").insert(tasks);
+    const { data, error } = await supabase.from("Todo").insert(tasks).select();
     if (error) {
       return rejectWithValue(error.message);
     }
@@ -68,7 +68,11 @@ export const deleteTaskInDB = createAsyncThunk(
       return rejectWithValue("No task ID provided.");
     }
 
-    const { data, error } = await supabase.from("Todo").delete().eq("id", id);
+    const { data, error } = await supabase
+      .from("Todo")
+      .delete()
+      .eq("id", id)
+      .select();
     if (error) {
       return rejectWithValue(error.message);
     }
