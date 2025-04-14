@@ -2,9 +2,7 @@ import { deleteTaskInDB } from "../Slices/TodoSlice";
 
 export const deleteTask = async (
   id: `${string}-${string}-${string}-${string}-${string}`,
-  dispatch: any,
-  setTaskDeleted: (value: boolean) => void,
-  taskDeleted: boolean
+  dispatch: any
 ) => {
   try {
     // Dispatch the delete action
@@ -13,8 +11,6 @@ export const deleteTask = async (
     if (result.error) {
       console.error("Error deleting task:", result.error.message);
     } else {
-      console.log("Task deleted successfully");
-      setTaskDeleted(!taskDeleted);
     }
   } catch (error) {
     console.error("Failed to delete task:", error);

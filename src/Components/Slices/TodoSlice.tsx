@@ -53,7 +53,6 @@ export const updateTaskInDB = createAsyncThunk(
     if (error) {
       return rejectWithValue(error.message);
     }
-    console.log(data, "Async Thunk");
     return data; // Supabase returns an array with the updated task
   }
 );
@@ -73,7 +72,6 @@ export const deleteTaskInDB = createAsyncThunk(
     if (error) {
       return rejectWithValue(error.message);
     }
-    console.log(data);
 
     return data; // Supabase returns an array with the deleted task
   }
@@ -116,7 +114,7 @@ const todoSlice = createSlice({
       })
       .addCase(insertTasks.rejected, (state, action) => {
         console.error("Error inserting tasks:", action.payload);
-        console.log("State before insertion:", state.tasks);
+        console.log("State before insertion", state);
       })
 
       // Handle the result of the updateTaskInDB async thunk
@@ -133,7 +131,7 @@ const todoSlice = createSlice({
       })
       .addCase(updateTaskInDB.rejected, (state, action) => {
         console.error("Error updating task:", action.payload);
-        console.log("State before update:", state.tasks);
+        console.log("State before updation", state);
       })
 
       // Handle the result of the deleteTaskInDB async thunk
@@ -149,7 +147,7 @@ const todoSlice = createSlice({
       })
       .addCase(deleteTaskInDB.rejected, (state, action) => {
         console.error("Error deleting task:", action.payload);
-        console.log("State before deletion:", state.tasks);
+        console.log("State before deletion", state);
       });
   },
 });

@@ -42,10 +42,8 @@ export const Home = ({ user }: { user: User }) => {
       } else {
         const checkedTasks = data.filter((task) => task.completed);
         const uncheckedTasks = data.filter((task) => !task.completed);
-        console.log(uncheckedTasks, checkedTasks);
         dispatch(setTasks([...uncheckedTasks, ...checkedTasks]));
         setLoading(false); // Set loading to false once tasks are fetched
-        console.log(tasks, "tasks");
       }
     };
 
@@ -53,11 +51,6 @@ export const Home = ({ user }: { user: User }) => {
   }, [user]);
 
   useEffect(() => {
-    console.log(
-      tasks.map((task) => task.completed),
-      "tasks"
-    );
-
     const getHomeTasks = () => {
       const oneDay = 24 * 60 * 60 * 1000;
       const today = new Date();
@@ -82,12 +75,8 @@ export const Home = ({ user }: { user: User }) => {
         ...unchekedTomorrowTasks,
         ...checkedTomorrowTasks,
       ];
-      console.log(
-        reorderedTomorrowTasks.map((task) => task.completed),
-        "reordered tomorrow tasks"
-      );
+
       setHomeTasks(reorderedTomorrowTasks);
-      console.log(tomorrowTasks, "tomorrow tasks");
     };
     getHomeTasks();
   }, [tasks]);

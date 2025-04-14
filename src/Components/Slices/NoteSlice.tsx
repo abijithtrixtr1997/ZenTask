@@ -17,15 +17,14 @@ const initialState: NoteState = {
 
 export const insertNoteInDB = createAsyncThunk(
   "notes/insertNotes",
-  async (notes: Note[], { rejectWithValue }) => {
-    if (!notes || notes.length === 0) {
+  async (note: Note, { rejectWithValue }) => {
+    if (!note) {
       return rejectWithValue("Nothing to insert.");
     }
-    const { data, error } = await supabase.from("Notes").insert(notes);
+    const { data, error } = await supabase.from("Notes").insert(note).select();
     if (error) {
       return rejectWithValue(error.message);
     }
-
     return data;
   }
 );
@@ -67,8 +66,6 @@ export const deleteNoteInDB = createAsyncThunk(
     if (error) {
       return rejectWithValue(error.message);
     }
-    console.log("Note state updated");
-    console.log("Supabase delete response:", data);
     return data;
   }
 );
@@ -103,7 +100,7 @@ const noteSlice = createSlice({
       })
       .addCase(insertNoteInDB.rejected, (state, action) => {
         console.error("Error inserting note:", action.payload);
-        console.log("State before insertion:", state.notes);
+        console.log("State before insertion", state);
       })
       .addCase(updateNoteInDB.fulfilled, (state, action) => {
         if (action.payload && Array.isArray(action.payload)) {
@@ -118,7 +115,7 @@ const noteSlice = createSlice({
       })
       .addCase(updateNoteInDB.rejected, (state, action) => {
         console.error("Error updating note:", action.payload);
-        console.log("State before updation:", state.notes);
+        console.log("State before updation", state);
       })
       .addCase(deleteNoteInDB.fulfilled, (state, action) => {
         if (action.payload && Array.isArray(action.payload)) {
@@ -127,7 +124,6 @@ const noteSlice = createSlice({
             state.notes = state.notes.filter(
               (task) => task.id !== deletedNoteId
             );
-            console.log("Note deleted successfully:", deletedNoteId);
           }
         } else {
           console.error("Payload format is not as expected:", action.payload);
@@ -135,7 +131,7 @@ const noteSlice = createSlice({
       })
       .addCase(deleteNoteInDB.rejected, (state, action) => {
         console.error("Error deleting task:", action.payload);
-        console.log("State before deletion:", state.notes);
+        console.log("State before deletion", state);
       });
   },
 });

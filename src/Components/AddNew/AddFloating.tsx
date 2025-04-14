@@ -5,8 +5,6 @@ import { AddTask } from "./AddTask";
 import { IconX } from "@tabler/icons-react";
 
 interface FloatingContainerProps {
-  setTaskAdded: (taskAdded: boolean) => void;
-  taskAdded: boolean; // Function to notify the parent that task was added
   clicked: boolean; // Function to notify the parent that task was added
   setClicked: (clicked: boolean) => void;
   selectedItem: string | null;
@@ -15,8 +13,6 @@ interface FloatingContainerProps {
 }
 
 export const FloatingContainer = ({
-  setTaskAdded,
-  taskAdded,
   clicked,
   setClicked,
   selectedItem,
@@ -46,7 +42,6 @@ export const FloatingContainer = ({
         !floatref.current.contains(event.target as Node)
       ) {
         setClicked(false); // Close the container if clicking outside
-        console.log("Clicked outside");
       }
     };
 
@@ -64,20 +59,10 @@ export const FloatingContainer = ({
   const renderComponent = () => {
     switch (selectedItem) {
       case "newTask":
-        console.log("Rendering AddTask component");
-        return (
-          <AddTask
-            setTaskAdded={setTaskAdded}
-            taskAdded={taskAdded}
-            clicked={clicked}
-            setClicked={setClicked}
-          />
-        );
+        return <AddTask clicked={clicked} setClicked={setClicked} />;
       case "newNote":
         return (
           <AddNote
-            taskAdded={taskAdded}
-            setTaskAdded={setTaskAdded}
             clicked={clicked}
             setClicked={setClicked}
             clickedForNewNote={clickedForNewNote}

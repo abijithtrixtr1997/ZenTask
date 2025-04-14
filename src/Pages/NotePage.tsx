@@ -5,8 +5,7 @@ import { InstantNote } from "../Components/InstantNote/InstantNote";
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { setNotes } from "../Components/Slices/NoteSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../Store";
+import { useDispatch } from "react-redux";
 
 interface NotePageProps {
   user: User;
@@ -14,8 +13,6 @@ interface NotePageProps {
 
 export const NotePage = ({ user }: NotePageProps) => {
   const dispatch = useDispatch();
-  const notes = useSelector((state: RootState) => state.note.notes);
-  const [noteAdded, setNoteAdded] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -33,14 +30,12 @@ export const NotePage = ({ user }: NotePageProps) => {
       setLoading(false);
     };
     getNotes();
-
-    console.log(notes, "note state from notepage");
-  }, [noteAdded, user]);
+  }, [user]);
 
   return (
     <Flex className="note-page" p={20}>
-      <InstantNote noteAdded={noteAdded} setNoteAdded={setNoteAdded} />
-      {loading ? null : <NoteList user={user} noteAdded={noteAdded} />}
+      <InstantNote />
+      {loading ? null : <NoteList user={user} />}
     </Flex>
   );
 };

@@ -4,27 +4,19 @@ import { useEffect, useState } from "react";
 import { DisplayTasks } from "../TaskList/DisplayTasks";
 import { supabase } from "../../supabaseClient";
 import { Task } from "../../types";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Store";
 
 interface HomeViewProps {
   user: User;
-  taskUpdated: boolean;
-  setTaskUpdated: (value: boolean) => void;
   homeTasks: Task[];
   setHomeTasks: (value: Task[]) => void;
-  taskAdded: boolean;
 }
 
-export const HomeView = ({
-  user,
-  taskUpdated,
-  setTaskUpdated,
-  homeTasks,
-  setHomeTasks,
-  taskAdded,
-}: HomeViewProps) => {
+export const HomeView = ({ user, homeTasks, setHomeTasks }: HomeViewProps) => {
   const [checkedMap, setCheckedMap] = useState<Record<string, boolean>>({});
-  const [taskDeleted, setTaskDeleted] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const tasks = useSelector((state: RootState) => state.todo.tasks);
 
   const handleSetChecked = (id: string, value: boolean) => {
     setCheckedMap((prev) => ({ ...prev, [id]: value }));
@@ -64,11 +56,10 @@ export const HomeView = ({
         ];
         setHomeTasks(reorderedTomorrowTasks);
         setLoading(false);
-        console.log(loading);
       }
     };
     getTasks();
-  }, [taskDeleted, taskUpdated, user, taskAdded]);
+  }, [user, tasks]);
 
   return (
     <Flex
@@ -81,6 +72,7 @@ export const HomeView = ({
     >
       <h1 className="home-title">Your Day</h1>
       <div className="inside-home" style={{ display: "flex" }}>
+        {loading ? <p>Your tasks are being loaded...</p> : null}
         <Flex className="task-whole-list" direction="column" align="flex-start">
           {homeTasks.length > 0 ? (
             homeTasks.map((task) => (
@@ -91,10 +83,6 @@ export const HomeView = ({
                 setChecked={(value: boolean) =>
                   handleSetChecked(task.id, value)
                 }
-                setTaskDeleted={setTaskDeleted}
-                taskDeleted={taskDeleted}
-                taskUpdated={taskUpdated}
-                setTaskUpdated={setTaskUpdated}
               />
             ))
           ) : (

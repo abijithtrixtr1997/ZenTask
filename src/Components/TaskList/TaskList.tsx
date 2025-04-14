@@ -4,6 +4,8 @@ import { DisplayTasks } from "./DisplayTasks";
 import { Flex } from "@mantine/core";
 import { supabase } from "../../supabaseClient";
 import { Task } from "../../types";
+import { RootState } from "../../Store";
+import { useSelector } from "react-redux";
 
 interface TaskListProps {
   user: User;
@@ -12,16 +14,11 @@ interface TaskListProps {
   setTaskUpdated: (value: boolean) => void;
 }
 
-export const TaskList = ({
-  user,
-  taskAdded,
-  taskUpdated,
-  setTaskUpdated,
-}: TaskListProps) => {
+export const TaskList = ({ user }: TaskListProps) => {
   const [checkedMap, setCheckedMap] = useState<Record<string, boolean>>({});
-  const [taskDeleted, setTaskDeleted] = useState(false);
   const [localTasks, setLocalTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const tasks = useSelector((state: RootState) => state.todo.tasks);
   const [incompletedTasks, setIncompleteTasks] = useState<Task[]>(
     localTasks.filter((task) => !task.completed)
   );
@@ -42,20 +39,14 @@ export const TaskList = ({
         const checkedTasks = data.filter((task) => task.completed);
         const uncheckedTasks = data.filter((task) => !task.completed);
         const reorderedTasks = [...uncheckedTasks, ...checkedTasks];
-        console.log(reorderedTasks, "reordered tasks");
         setLocalTasks(reorderedTasks);
         setLoading(false);
-        console.log(loading);
         setCompletedTasks(reorderedTasks.filter((task) => task.completed));
         setIncompleteTasks(reorderedTasks.filter((task) => !task.completed)); // Set loading to false once tasks are fetched
       }
     };
-    const timeout = setTimeout(() => {
-      getTasks();
-    }, 500);
-
-    return () => clearTimeout(timeout);
-  }, [taskUpdated, taskDeleted, user, taskAdded]);
+    getTasks();
+  }, [tasks, user]);
 
   const handleSetChecked = (id: string, value: boolean) => {
     setCheckedMap((prev) => ({ ...prev, [id]: value }));
@@ -63,6 +54,7 @@ export const TaskList = ({
 
   return (
     <Flex className="task-whole-list" direction="row" align="flex-start">
+      {loading ? <p>Your tasks are being loaded...</p> : null}
       <Flex className="completed" direction={"column"}>
         {completedTasks.length > 0 ? (
           completedTasks.map((task) => (
@@ -71,10 +63,6 @@ export const TaskList = ({
               task={task}
               checked={checkedMap[task.id] || false}
               setChecked={(value: boolean) => handleSetChecked(task.id, value)}
-              setTaskDeleted={setTaskDeleted}
-              taskDeleted={taskDeleted}
-              taskUpdated={taskUpdated}
-              setTaskUpdated={setTaskUpdated}
             />
           ))
         ) : (
@@ -89,10 +77,6 @@ export const TaskList = ({
               task={task}
               checked={checkedMap[task.id] || false}
               setChecked={(value: boolean) => handleSetChecked(task.id, value)}
-              setTaskDeleted={setTaskDeleted}
-              taskDeleted={taskDeleted}
-              taskUpdated={taskUpdated}
-              setTaskUpdated={setTaskUpdated}
             />
           ))
         ) : (

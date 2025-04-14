@@ -17,12 +17,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { FloatingContainer } from "./AddNew/AddFloating";
 
-interface AddTaskProps {
-  setTaskAdded: (taskAdded: boolean) => void;
-  taskAdded: boolean; // Function to notify the parent that task was added
-}
-
-export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
+export const CreateNew = () => {
   const [clicked, setClicked] = useState(false);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [clickedForNewNote, setClickedForNewNote] = useState<boolean>(false);
@@ -38,11 +33,9 @@ export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
     const targetClassList = event.currentTarget.classList; // Get the clicked button's class
 
     if (targetClassList.contains("new-note-button")) {
-      console.log("New Note button clicked");
       setSelectedItem("newNote");
       setClickedForNewNote(true);
     } else if (targetClassList.contains("new-task-button")) {
-      console.log("New Task button clicked");
       setSelectedItem("newTask");
     }
   };
@@ -141,8 +134,6 @@ export const CreateNew = ({ taskAdded, setTaskAdded }: AddTaskProps) => {
       {clicked && (
         <div className="for-floating">
           <FloatingContainer
-            setTaskAdded={setTaskAdded}
-            taskAdded={taskAdded}
             clicked={clicked}
             setClicked={setClicked}
             clickedForNewNote={clickedForNewNote}

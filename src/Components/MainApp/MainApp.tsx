@@ -3,7 +3,7 @@ import { CreateNew } from "../CreateNew";
 import { HomeView } from "../HomeView/HomeView";
 import { GoogleGenAI } from "@google/genai";
 import { Button, TextInput } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Task } from "../../types";
 
 interface MainAppProps {
@@ -16,38 +16,20 @@ interface MainAppProps {
   setHomeTasks: (value: Task[]) => void;
 }
 
-export const MainApp = ({
-  user,
-  taskAdded,
-  setTaskAdded,
-  taskUpdated,
-  setTaskUpdated,
-  homeTasks,
-  setHomeTasks,
-}: MainAppProps) => {
+export const MainApp = ({ user, homeTasks, setHomeTasks }: MainAppProps) => {
   const VITE_GEMINI_API_KEY: string = import.meta.env.VITE_GEMINI_API_KEY!;
   const [question, setQuestion] = useState<string>("");
   const ai = new GoogleGenAI({
     apiKey: VITE_GEMINI_API_KEY,
   });
 
-  useEffect(() => {
-    const timeNow = new Date();
-    const saveBasicInfo = async () => {
-      const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
-        contents: `Time now is ${timeNow}`,
-      });
-      console.log(response.text);
-    };
-    saveBasicInfo();
-  }, []);
-
   const handleGemini = async (e: React.FormEvent) => {
     e.preventDefault();
+    const timeNow = new Date();
+    const fullPrompt = `${question}\n\nCurrent time is ${timeNow}.`;
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",
-      contents: question,
+      contents: fullPrompt,
     });
     console.log(response.text);
   };
@@ -70,14 +52,11 @@ export const MainApp = ({
           </div>
 
           <div className="create-new-container">
-            <CreateNew setTaskAdded={setTaskAdded} taskAdded={taskAdded} />
+            <CreateNew />
           </div>
           <div className="home-view-container">
             <HomeView
               user={user}
-              taskAdded={taskAdded}
-              taskUpdated={taskUpdated}
-              setTaskUpdated={setTaskUpdated}
               homeTasks={homeTasks}
               setHomeTasks={setHomeTasks}
             />

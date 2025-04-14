@@ -5,10 +5,11 @@ import "quill/dist/quill.snow.css"; // Import Quill styles
 import { IconDeviceFloppy } from "@tabler/icons-react";
 import { supabase } from "../../supabaseClient"; // Import Supabase client
 import { User } from "@supabase/supabase-js";
+import { insertNoteInDB } from "../Slices/NoteSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../Store";
 
 interface AddNoteProps {
-  setTaskAdded: (taskAdded: boolean) => void;
-  taskAdded: boolean;
   clicked: boolean; // Function to notify the parent that task was added
   setClicked: (clicked: boolean) => void;
   clickedForNewNote: boolean;
@@ -16,17 +17,16 @@ interface AddNoteProps {
 }
 
 export const AddNote = ({
-  setTaskAdded,
   clicked,
   setClicked,
-  taskAdded,
   clickedForNewNote,
   setClickedForNewNote,
 }: AddNoteProps) => {
   const editorRef = useRef<HTMLDivElement | null>(null);
-  const [user, setUser] = useState<User | null>(null); // State to hold user data
-  const [quill, setQuill] = useState<Quill | null>(null); // State to hold the Quill instance
-  const [title, setTitle] = useState<string>(""); // State to hold the note title
+  const [user, setUser] = useState<User | null>(null);
+  const [quill, setQuill] = useState<Quill | null>(null);
+  const [title, setTitle] = useState<string>("");
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (!quill && editorRef.current) {
@@ -59,61 +59,50 @@ export const AddNote = ({
   const handleSave = async () => {
     if (quill) {
       const noteContent = quill.root.innerHTML;
-      const plainText = quill.getText(); // Get plain text content
+      const plainText = quill.getText();
       const editorElement = quill.root;
 
-      console.log("Note content:", noteContent);
-      console.log("Plain text content:", plainText); // Log plain text content
-      console.log("Note content trim:", noteContent.trim());
       const trimContent = (htmlContent: string) => {
         if (htmlContent.includes("<img")) {
-          return htmlContent; // Return an empty string if an image is present
+          return htmlContent;
         }
 
-        // Remove all HTML tags
         const trimmed = htmlContent.replace(/<\/?[^>]+(>|$)/g, "");
 
-        // Trim content by removing the first 3 characters and last 4 characters
         return trimmed.length > 3
           ? trimmed.substring(3, trimmed.length - 4).trim()
           : "";
       };
 
-      // Get the trimmed content between <p> and </p> tags
-      const trimmedNoteContent = trimContent(noteContent); // Log plain text content
-      console.log(trimmedNoteContent, "trimContent");
+      const trimmedNoteContent = trimContent(noteContent);
       if (
         plainText.trim() === "" &&
         title === "" &&
         (trimmedNoteContent.trim() === "" ||
           trimmedNoteContent.trim() === "<br>")
       ) {
-        console.log("if clause works");
         editorElement.classList.add("empty-note");
         return;
       }
-      console.log("About to save note to Supabase");
-      try {
-        const { data, error } = await supabase.from("Notes").insert([
-          {
-            uuid: user?.id,
-            Title: title,
-            Content: noteContent,
-          },
-        ]);
+      if (user) {
+        const newNote = {
+          id: crypto.randomUUID(),
+          uuid: user.id,
+          Title: title,
+          Content: noteContent,
+          created_at: new Date().toISOString(),
+        };
 
-        if (error) {
-          console.error("Error saving note:", error); // Handle error
-        } else {
-          console.log("Note saved successfully:", data);
+        try {
+          await dispatch(insertNoteInDB(newNote));
+        } catch (error) {
+          console.error("Unexpected error saving note:", error);
         }
-      } catch (error) {
-        console.error("Error saving note:", error);
+
+        editorElement.classList.remove("empty-note");
+        setClicked(false);
+        setClickedForNewNote(false);
       }
-      editorElement.classList.remove("empty-note");
-      setTaskAdded(!taskAdded);
-      setClicked(false);
-      setClickedForNewNote(false);
     }
   };
 

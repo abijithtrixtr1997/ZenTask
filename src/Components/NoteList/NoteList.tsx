@@ -8,21 +8,19 @@ import { Note } from "../../types";
 
 interface NoteListProps {
   user: User;
-  noteAdded: boolean;
 }
 
-export const NoteList = ({ user, noteAdded }: NoteListProps) => {
+export const NoteList = ({ user }: NoteListProps) => {
   const [noteUpdated, setNoteUpdated] = useState<boolean>(false);
   const [localNotes, setLocalNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const notes = useSelector((state: RootState) => state.note.notes);
 
   useEffect(() => {
-    console.log("notes changed");
     setLocalNotes(notes);
+    console.log("useEffect called");
     setLoading(false);
-    console.log(user, noteAdded);
-  }, [notes, user, noteAdded]);
+  }, [notes, user]);
 
   return (
     <Flex

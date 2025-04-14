@@ -42,10 +42,8 @@ export const App = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const { data: sessionData } = await supabase.auth.getSession();
-      console.log("Session Data:", sessionData);
 
       if (!sessionData.session) {
-        console.log("No active session, user is not logged in.");
         setUser(null);
         return;
       }
@@ -55,7 +53,6 @@ export const App = () => {
         console.error("Error fetching user:", error.message);
       }
       setUser(data?.user);
-      console.log("User fetched successfully!", data?.user);
     };
     fetchUser();
   }, []);

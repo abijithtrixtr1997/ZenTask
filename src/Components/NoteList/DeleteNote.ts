@@ -13,7 +13,6 @@ export const deleteNoteFunction = async (
     if (result.error) {
       console.error("Error deleting task:", result.error.message);
     } else {
-      console.log("Task deleted successfully");
       setNoteUpdated(!noteUpdated);
     }
   } catch (error) {

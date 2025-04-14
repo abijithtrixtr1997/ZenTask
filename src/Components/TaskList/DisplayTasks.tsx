@@ -13,20 +13,12 @@ interface DisplayTasksProps {
   task: Task;
   checked: boolean;
   setChecked: (value: boolean) => void;
-  setTaskDeleted: (value: boolean) => void;
-  taskDeleted: boolean;
-  taskUpdated: boolean;
-  setTaskUpdated: (value: boolean) => void;
 }
 
 export const DisplayTasks = ({
   task,
   checked,
   setChecked,
-  setTaskDeleted,
-  taskDeleted,
-  taskUpdated,
-  setTaskUpdated,
 }: DisplayTasksProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
@@ -66,8 +58,6 @@ export const DisplayTasks = ({
   const handleCheck = async () => {
     const newChecked = !checked;
     setChecked(newChecked);
-    setTaskUpdated(!taskUpdated);
-    console.log(checked, "checked from displaytasks");
     const updatedTask = { ...task, completed: checked };
     const updatedTasks = tasks.map((t) => (t.id === task.id ? updatedTask : t));
 
@@ -93,7 +83,6 @@ export const DisplayTasks = ({
   };
 
   const handleSave = async () => {
-    console.log("Saving changes...");
     setTimeout(async () => {
       setLoading(true);
       try {
@@ -125,7 +114,7 @@ export const DisplayTasks = ({
   };
 
   const handleDelete = () => {
-    deleteTask(task.id, dispatch, setTaskDeleted, taskDeleted);
+    deleteTask(task.id, dispatch);
   };
 
   return (

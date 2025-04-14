@@ -56,18 +56,11 @@ interface dataToSend {
 }
 
 interface AddTaskProps {
-  setTaskAdded: (taskAdded: boolean) => void;
-  taskAdded: boolean;
   clicked: boolean;
   setClicked: (clicked: boolean) => void;
 }
 
-export const AddTask = ({
-  setTaskAdded,
-  taskAdded,
-  clicked,
-  setClicked,
-}: AddTaskProps) => {
+export const AddTask = ({ clicked, setClicked }: AddTaskProps) => {
   const dispatch = useDispatch();
   const [descOpened, { toggle: toggleDesc }] = useDisclosure(false);
   const [clockOpened, { toggle: toggleClock }] = useDisclosure(false);
@@ -96,10 +89,7 @@ export const AddTask = ({
   }, []);
 
   const onSubmit: SubmitHandler<dataToSend> = async (data: dataToSend) => {
-    console.log("in Submit");
     try {
-      console.log("Submitting task to Supabase");
-
       const newTask = {
         id: crypto.randomUUID(),
         uid: user?.id,
@@ -116,9 +106,7 @@ export const AddTask = ({
       reset();
       if (data.description) toggleDesc();
 
-      console.log("Task added successfully");
       setClicked(false);
-      setTaskAdded(!taskAdded);
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error("Supabase Error:", err.message);
@@ -129,10 +117,8 @@ export const AddTask = ({
   };
 
   useEffect(() => {
-    console.log("Time selected: ", { selectedTime });
     if (selectedTime) {
       setFormattedTime(new Date(selectedTime).toISOString());
-      console.log("Formatted time: ", { formattedTime });
     }
   }, [selectedTime, formattedTime]);
 
