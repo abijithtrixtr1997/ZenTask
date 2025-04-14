@@ -1,4 +1,3 @@
-import { User } from "@supabase/supabase-js";
 import { CreateNew } from "../CreateNew";
 import { HomeView } from "../HomeView/HomeView";
 import { GoogleGenAI } from "@google/genai";
@@ -7,12 +6,10 @@ import { useState } from "react";
 import { Task } from "../../types";
 
 interface MainAppProps {
-  user: User;
   homeTasks: Task[];
-  setHomeTasks: (value: Task[]) => void;
 }
 
-export const MainApp = ({ user, homeTasks, setHomeTasks }: MainAppProps) => {
+export const MainApp = ({ homeTasks }: MainAppProps) => {
   const VITE_GEMINI_API_KEY: string = import.meta.env.VITE_GEMINI_API_KEY!;
   const [question, setQuestion] = useState<string>("");
   const ai = new GoogleGenAI({
@@ -51,11 +48,7 @@ export const MainApp = ({ user, homeTasks, setHomeTasks }: MainAppProps) => {
             <CreateNew />
           </div>
           <div className="home-view-container">
-            <HomeView
-              user={user}
-              homeTasks={homeTasks}
-              setHomeTasks={setHomeTasks}
-            />
+            <HomeView homeTasks={homeTasks} />
           </div>
         </div>
       </div>

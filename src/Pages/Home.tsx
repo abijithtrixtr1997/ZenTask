@@ -129,11 +129,7 @@ export const Home = ({ user }: { user: User }) => {
           {loading ? (
             <div>Loading...</div>
           ) : currentPage === "Main" ? (
-            <MainApp
-              user={user}
-              homeTasks={homeTasks}
-              setHomeTasks={setHomeTasks}
-            />
+            <MainApp homeTasks={homeTasks} />
           ) : currentPage === "Task" ? (
             <Taskpage user={user} />
           ) : currentPage === "Note" ? (
