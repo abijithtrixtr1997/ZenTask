@@ -199,7 +199,10 @@ export const AddTask = ({ clicked, setClicked }: AddTaskProps) => {
                       className="collapse-box"
                       w={"100%"}
                     >
-                      <DateTimePicker setSelectedTime={setSelectedTime} />
+                      <DateTimePicker
+                        selectedTime={selectedTime}
+                        setSelectedTime={setSelectedTime}
+                      />
                     </Collapse>
                   </Flex>
                 </Flex>

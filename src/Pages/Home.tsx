@@ -56,23 +56,35 @@ export const Home = ({ user }: { user: User }) => {
         if (!task.Due) return false;
         const taskDate = new Date(task.Due);
         return (
-          taskDate.getFullYear() === tomorrow.getFullYear() &&
-          taskDate.getMonth() === tomorrow.getMonth() &&
-          (taskDate.getDate() === tomorrow.getDate() ||
-            taskDate.getDate() === today.getDate())
+          (taskDate.getFullYear() === tomorrow.getFullYear() &&
+            taskDate.getMonth() === tomorrow.getMonth() &&
+            (taskDate.getDate() === tomorrow.getDate() ||
+              taskDate.getDate() === today.getDate())) ||
+          (taskDate < today && !task.completed)
         );
       });
-      const unchekedTomorrowTasks = tomorrowTasks.filter(
+
+      const sortByDueDate = (a: Task, b: Task) => {
+        if (!a.Due) return 1;
+        if (!b.Due) return -1;
+
+        return new Date(a.Due).getTime() - new Date(b.Due).getTime();
+      };
+
+      tomorrowTasks.sort(sortByDueDate);
+
+      const uncheckedTomorrowTasks = tomorrowTasks.filter(
         (task) => !task.completed
       );
+
       const checkedTomorrowTasks = tomorrowTasks.filter(
         (task) => task.completed
       );
+
       const reorderedTomorrowTasks = [
-        ...unchekedTomorrowTasks,
+        ...uncheckedTomorrowTasks,
         ...checkedTomorrowTasks,
       ];
-
       setHomeTasks(reorderedTomorrowTasks);
     };
     getHomeTasks();

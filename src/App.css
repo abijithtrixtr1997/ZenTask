@@ -73,11 +73,6 @@ html {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Shadow effect */
 }
 
-.individual-task {
-  position: relative;
-  width: 100%;
-}
-
 .done-toggle {
   display: none;
 }
@@ -92,88 +87,6 @@ html {
     opacity 0.3s ease-in-out,
     transform 0.2s ease;
   transform: scale(0.9);
-}
-
-.toggle-checkbox:hover .done-icon-false,
-.done-icon.checked {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.toggle-checkbox {
-  width: 22px;
-  height: 22px;
-  position: absolute;
-  right: 0%;
-  top: 0%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  padding: 1%;
-  border: 1px solid #8f9562;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.edit-delete {
-  position: absolute;
-  right: 10%;
-  top: 0%;
-  display: flex;
-  gap: 10%;
-}
-
-.edit-button,
-.delete-button {
-  width: 22px !important;
-  height: 22px !important;
-  padding: 0.5rem 0.5rem;
-  border-radius: 10%;
-  background-color: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: none;
-}
-
-.edit-icon,
-.delete-icon {
-  position: absolute;
-
-  transition:
-    transform 0.3s ease-in-out,
-    fill 0.3s ease-in-out;
-  scale: 1;
-}
-
-.edit-button:hover .edit-icon,
-.delete-button:hover .delete-icon {
-  transform: scale(1.2);
-  fill: red;
-}
-
-.delete-button:hover .delete-icon {
-  fill: red;
-}
-
-.edit-button:hover .edit-icon {
-  fill: #4a90e2;
-  stroke: #4a90e2;
-}
-
-.done-toggle-display {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .in-main-app {
@@ -340,30 +253,6 @@ html {
   margin-bottom: 16px; /* for spacing between "rows" */
 }
 
-.display-task {
-  break-inside: avoid;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  width: 300px;
-  height: auto;
-  border-radius: 12px;
-  background-color: #fff;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-  transition:
-    transform 0.3s ease-in-out,
-    box-shadow 0.3s ease-in-out;
-  will-change: transform;
-  cursor: pointer; /* Optional */
-}
-
-.display-task:hover {
-  transform: scale(1.01);
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.35);
-}
-
-.task-whole-list,
 .note-whole-list {
   justify-content: flex-start;
   width: 100%;
@@ -659,14 +548,6 @@ html {
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5); /* optional dark backdrop */
-}
-
-.outer-display-task {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
 }
 
 .outer-task-input::before {

@@ -2,10 +2,14 @@ import { useState, useEffect } from "react";
 import { TextInput, Flex, Switch } from "@mantine/core";
 
 interface DateTimePickerProps {
+  selectedTime: string;
   setSelectedTime: (time: string) => void;
 }
 
-export const DateTimePicker = ({ setSelectedTime }: DateTimePickerProps) => {
+export const DateTimePicker = ({
+  selectedTime,
+  setSelectedTime,
+}: DateTimePickerProps) => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [hours, setHours] = useState<string>("");
   const [minutes, setMinutes] = useState<string>("");
@@ -15,8 +19,32 @@ export const DateTimePicker = ({ setSelectedTime }: DateTimePickerProps) => {
     setSelectedDate(e.target.value);
   };
 
+  useEffect(() => {
+    if (selectedTime) {
+      const dateObj = new Date(selectedTime);
+
+      // Set formatted date as yyyy-mm-dd (or customize)
+      const yyyy = dateObj.getFullYear();
+      const mm = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const dd = String(dateObj.getDate()).padStart(2, "0");
+      setSelectedDate(`${yyyy}-${mm}-${dd}`);
+
+      // Extract hours and minutes
+      let hrs = dateObj.getHours();
+      const mins = String(dateObj.getMinutes()).padStart(2, "0");
+      console.log(hrs);
+
+      setMinutes(mins);
+
+      // Determine AM/PM and convert to 12-hour format
+      const isPM = hrs >= 12;
+      hrs = hrs % 12 || 12;
+      setHours(hrs.toString());
+      setPeriod(isPM);
+    }
+  }, [selectedTime]);
+
   const handleTimeChange = (type: "hours" | "minutes", value: string) => {
-    // Allow only numeric input and limit length to 2
     const numericValue = value.replace(/\D/g, "");
 
     if (type === "hours") {

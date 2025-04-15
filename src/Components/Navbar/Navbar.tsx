@@ -18,6 +18,9 @@ export const Navbar = ({ user }: { user: User }) => {
       navigate("/login");
     }
   };
+  const handleNavigation = () => {
+    navigate("/profile");
+  };
 
   return (
     <>
@@ -48,7 +51,12 @@ export const Navbar = ({ user }: { user: User }) => {
           </Popover.Target>
           <Popover.Dropdown>
             <Flex className="ddm-menu" align={"center"} direction={"column"}>
-              <Button variant="subtle" justify="center" fullWidth>
+              <Button
+                variant="subtle"
+                justify="center"
+                fullWidth
+                onClick={handleNavigation}
+              >
                 Profile
               </Button>
               <Button variant="subtle" justify="center" fullWidth mb={"0.5rem"}>

@@ -3,11 +3,12 @@ import { useState, useEffect, useRef } from "react";
 import { updateTaskInDB, updateTaskLocally } from "../Slices/TodoSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../Store";
-import { IconCheck, IconTrashFilled } from "@tabler/icons-react";
-import { format } from "date-fns";
+import { IconCheck, IconPencil, IconTrashFilled } from "@tabler/icons-react";
+import { format, formatDistanceToNow, differenceInMinutes } from "date-fns";
 import { DateTimePicker } from "../Date_And_Time/Time";
 import { deleteTask } from "./DeleteTask";
 import { Task } from "../../types";
+import "./Tasks.css";
 
 interface DisplayTasksProps {
   task: Task;
@@ -32,6 +33,15 @@ export const DisplayTasks = ({
   const editorRef = useRef<HTMLDivElement>(null);
   const tasks = useSelector((state: RootState) => state.todo.tasks);
 
+  const getDueColor = (minutesUntilDue: number) => {
+    if (!checked) {
+      if (minutesUntilDue < 0) return "red"; // Overdue
+      if (minutesUntilDue < 60) return "orange"; // Due in < 1 hour
+      if (minutesUntilDue < 1440) return "yellow"; // Due within a day
+      return "green"; // More than a day left
+    }
+  };
+
   useEffect(() => {
     setChecked(task.completed);
   }, [task.completed]);
@@ -46,12 +56,20 @@ export const DisplayTasks = ({
       }
     }
 
+    function handleEscapeKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        handleSave();
+      }
+    }
+
     if (isEditing) {
       document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleEscapeKey);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscapeKey);
     };
   }, [isEditing, editTitle, editDescription, selectedTime]);
 
@@ -119,15 +137,21 @@ export const DisplayTasks = ({
 
   return (
     <div className="outer-display-task">
-      <Container className="display-task" maw={400} p={10}>
+      <Container className="display-task" p={10}>
         <Flex
-          className="individual-task"
+          ref={editorRef}
+          className={isEditing ? `individual-task editing` : `individual-task`}
           gap="xs"
-          direction="column"
-          align="flex-start"
           onDoubleClick={handleEdit}
         >
-          <div ref={editorRef}>
+          <div
+            ref={editorRef}
+            className={
+              isEditing
+                ? `title-description-container editing`
+                : `title-description-container`
+            }
+          >
             {isEditing ? (
               <>
                 <input
@@ -147,7 +171,10 @@ export const DisplayTasks = ({
                       className="task-description-input"
                       placeholder="Add description..."
                     />
-                    <DateTimePicker setSelectedTime={setSelectedTime} />
+                    <DateTimePicker
+                      setSelectedTime={setSelectedTime}
+                      selectedTime={selectedTime}
+                    />
                   </>
                 )}
 
@@ -163,7 +190,7 @@ export const DisplayTasks = ({
                 )}
               </>
             ) : (
-              <>
+              <div className="title-description">
                 <Title
                   order={5}
                   className="task-title"
@@ -176,40 +203,66 @@ export const DisplayTasks = ({
                   {editTitle}
                 </Title>
                 {editDescription && <Text size="xs">{editDescription}</Text>}
-                {selectedTime && (
-                  <Text size="xs">
-                    Due: {format(new Date(selectedTime), "dd-MM HH:mm")}
-                  </Text>
-                )}
-              </>
+                {selectedTime &&
+                  (() => {
+                    const dueDate = new Date(selectedTime);
+                    const minutesUntilDue = differenceInMinutes(
+                      dueDate,
+                      new Date()
+                    );
+                    const color = getDueColor(minutesUntilDue);
+
+                    return (
+                      <Text size="xs" c={color}>
+                        ⏰ Due{" "}
+                        {formatDistanceToNow(dueDate, { addSuffix: true })}
+                        {", "}
+                        {format(dueDate, "dd MMM, hh:mm a")}
+                      </Text>
+                    );
+                  })()}
+              </div>
             )}
           </div>
-          <div
-            className="toggle-checkbox"
-            onClick={handleCheck}
-            role="checkbox"
-            aria-checked={checked}
-            tabIndex={0}
-          >
-            <Checkbox
-              readOnly
-              checked={checked}
-              disabled={loading}
-              className="done-toggle"
-            />
-            <span className="done-toggle-display">
-              <IconCheck
-                size={15}
-                className={checked ? `done-icon-true` : `done-icon-false`}
-                color={checked ? "#8f9562" : "#ccc"}
-              />
-            </span>
-          </div>
+          <div className="manipulation-group">
+            <div
+              className="toggle-checkbox"
+              role="checkbox"
+              aria-checked={checked}
+              tabIndex={0}
+            >
+              <div className="delete-task">
+                <button className="edit-button" onClick={handleEdit}>
+                  <IconPencil className="edit-icon" size={15} color="#000" />
+                </button>
 
-          <div className="edit-delete">
-            <button className="delete-button" onClick={handleDelete}>
-              <IconTrashFilled className="delete-icon" size={15} color="#000" />
-            </button>
+                <button className="delete-button" onClick={handleDelete}>
+                  <IconTrashFilled
+                    className="delete-icon"
+                    size={15}
+                    color="#000"
+                  />
+                </button>
+              </div>
+              <Checkbox
+                readOnly
+                checked={checked}
+                disabled={loading}
+                className="done-toggle"
+              />
+              <span className="done-toggle-display" onClick={handleCheck}>
+                <IconCheck
+                  size={15}
+                  className={checked ? `done-icon-true` : `done-icon-false`}
+                  color={checked ? "#000" : "#ccc"}
+                />
+              </span>
+            </div>
+            {isEditing && (
+              <button className="save-button" onClick={handleSave}>
+                Save
+              </button>
+            )}
           </div>
         </Flex>
       </Container>

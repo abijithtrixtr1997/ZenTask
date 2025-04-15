@@ -1,0 +1,267 @@
+.outer-display-task {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.task-whole-list {
+  justify-content: flex-start;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  flex: 50%;
+}
+
+.whole-task-list {
+  border-radius: 12px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.toggle-completed-tasks:hover {
+  outline: none;
+  background-color: none;
+}
+
+.completed,
+.incompleted,
+.collapse-tasks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+}
+
+.display-task {
+  break-inside: avoid;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 12px 12px 12px 12px;
+  border: 1px ridge #ccc;
+  background: #f9f9f9;
+  width: 90%;
+  height: auto;
+  transition:
+    transform 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.display-task:hover {
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.individual-task {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 4dvw;
+  transition: height 0.3s ease-in-out;
+}
+
+.individual-task.editing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  transition: height 0.3s ease-in-out;
+}
+
+.title-description-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: opacity 10s ease-in-out;
+}
+
+.title-description-whole {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.title-description-container.editing {
+  animation: appear-edit 0.5s ease-in-out;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.3s ease-in-out;
+}
+
+@keyframes appear-edit {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.title-description-container textarea,
+.task-title-input {
+  border: none;
+  resize: none;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  display: flex;
+  font-size: small;
+  padding: 1rem;
+}
+
+.title-description-container textarea::placeholder {
+  font-size: small;
+}
+
+.title-description {
+  width: 100%;
+}
+
+.task-title {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+}
+
+.collapse-group {
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  height: auto;
+  cursor: pointer;
+}
+
+.caret-down-icon-close {
+  transition: transform 0.3s ease-in-out;
+}
+
+.caret-down-icon-open {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+.toggle-checkbox {
+  position: relative;
+  width: auto;
+  gap: 1rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.delete-button,
+.edit-button {
+  width: 22px !important;
+  height: 22px !important;
+  padding: 0.5rem 0.5rem;
+  border-radius: 10%;
+  background-color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+}
+
+.delete-task {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10%;
+}
+
+.manipulation-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.save-button {
+  padding: 8px 16px;
+  background-color: #007bff; /* blue */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  animation: appear-edit 0.3s ease-in;
+}
+
+.save-button:hover {
+  color: #fff;
+  background-color: #0056b3; /* darker blue */
+}
+
+.save-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.save-button:active {
+  background-color: #004a99;
+  transform: scale(0.97);
+}
+.delete-icon,
+.edit-icon {
+  position: absolute;
+  transition:
+    transform 0.3s ease-in-out,
+    fill 0.3s ease-in-out;
+  scale: 1;
+}
+
+.delete-button:hover .delete-icon {
+  transform: scale(1.2);
+  fill: red;
+}
+
+.edit-button:hover .edit-icon {
+  fill: grey;
+  stroke: grey;
+}
+
+.done-toggle-display {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: 1px solid #8f9562;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-checkbox:hover .done-icon-false,
+.done-icon.checked {
+  opacity: 1;
+  transform: scale(1);
+}
