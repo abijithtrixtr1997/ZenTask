@@ -1,14 +1,4 @@
 :root {
-  --mantine-primary-0: #f3f3f6;
-  --mantine-primary-1: #e4e4e6;
-  --mantine-primary-2: #c7c6ce;
-  --mantine-primary-3: #a8a6b6;
-  --mantine-primary-4: #8d8ba1;
-  --mantine-primary-5: #7c7a95; /* Default primary */
-  --mantine-primary-6: #747190;
-  --mantine-primary-7: #63607d;
-  --mantine-primary-8: #575571;
-  --mantine-primary-9: #4b4964;
   --mantine-color-text: var(--mantine-primary-9) !important;
 }
 
@@ -554,7 +544,7 @@ html {
   top: 0;
   left: 0;
   transform: translate(-50%, -50%) rotate(135deg);
-  background-color: #c9d1d9;
+  background-color: #212529;
   width: 100%;
   height: 100%;
   display: flex;
@@ -674,7 +664,7 @@ html {
   left: 50%;
   rotate: 135deg;
   transform: translate(-0%, -0%);
-  background-color: #c9d1d9;
+  background-color: #212529;
   width: 100%;
   height: 100%;
   z-index: 1; /* send it behind the main logo */

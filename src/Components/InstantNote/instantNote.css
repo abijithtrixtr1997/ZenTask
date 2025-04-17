@@ -1,3 +1,16 @@
+:root {
+  --mantine-primary-0: #212529;
+  --mantine-primary-1: #343a40;
+  --mantine-primary-2: #495057;
+  --mantine-primary-3: #6c757d;
+  --mantine-primary-4: #adb5bd;
+  --mantine-primary-5: #ced4da; /* Default primary */
+  --mantine-primary-6: #dee2e6;
+  --mantine-primary-7: #e9ecef;
+  --mantine-primary-8: #f8f9fa;
+  --mantine-primary-9: #fdfdfe;
+}
+
 .instant-note {
   width: 100%;
   display: flex;

@@ -1,14 +1,15 @@
 :root {
-  --mantine-primary-0: #f3f3f6;
-  --mantine-primary-1: #e4e4e6;
-  --mantine-primary-2: #c7c6ce;
-  --mantine-primary-3: #a8a6b6;
-  --mantine-primary-4: #8d8ba1;
-  --mantine-primary-5: #7c7a95; /* Default primary */
-  --mantine-primary-6: #747190;
-  --mantine-primary-7: #63607d;
-  --mantine-primary-8: #575571;
-  --mantine-primary-9: #4b4964;
+  --mantine-primary-0: #212529;
+  --mantine-primary-1: #343a40;
+  --mantine-primary-2: #495057;
+  --mantine-primary-3: #6c757d;
+  --mantine-primary-4: #adb5bd;
+  --mantine-primary-5: #ced4da; /* Default primary */
+  --mantine-primary-6: #dee2e6;
+  --mantine-primary-7: #e9ecef;
+  --mantine-primary-8: #f8f9fa;
+  --mantine-primary-9: #fdfdfe;
+
   --mantine-color-text: var(--mantine-primary-9) !important;
 }
 
