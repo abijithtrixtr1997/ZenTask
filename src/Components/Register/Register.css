@@ -16,6 +16,7 @@
   opacity: 1;
   transform: translateX(0);
   transition: transform 0.3s ease-in-out;
+  color: var(--mantine-primary-9);
 }
 
 .sign-up {
