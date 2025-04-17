@@ -47,7 +47,7 @@ export const LogInSignUp = () => {
 
         ctx.beginPath();
         ctx.arc(point.x, point.y + offsetY, 3, 0, 2 * Math.PI);
-        ctx.fillStyle = "#444";
+        ctx.fillStyle = "#CAD2C5";
         ctx.fill();
       });
 

@@ -1,11 +1,13 @@
 import { Button, Anchor, Flex, Tooltip } from "@mantine/core";
 import { IconHome, IconListCheck, IconNotes } from "@tabler/icons-react";
+import "./Leftbar.css";
 
 interface LeftBarProps {
   setCurrentPage: (value: string) => void;
 }
 
 export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
+  const svgColor = "#c7c6ce";
   const handleNavigation = (page: string) => {
     setCurrentPage(page);
   };
@@ -22,13 +24,12 @@ export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
             direction={"column"}
             gap={"1rem"}
             p={"1rem "}
-            style={{ borderTop: "2px solid #666666" }}
+            style={{ borderTop: "2px solid #f3f3f6" }}
           >
             <Anchor w={"100%"}>
               <Tooltip label="Home" position="top-end" offset={5}>
                 <Button
                   variant="subtle"
-                  color="#ffffff"
                   fullWidth
                   className="nav-button"
                   justify="start"
@@ -40,7 +41,7 @@ export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
                     gap={"0.5rem"}
                     justify={"center"}
                   >
-                    <IconHome />
+                    <IconHome color={svgColor} />
                   </Flex>
                 </Button>
               </Tooltip>
@@ -49,7 +50,6 @@ export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
               <Tooltip label="Notes" position="top-end" offset={5}>
                 <Button
                   variant="subtle"
-                  color="#ffffff"
                   fullWidth
                   className="nav-button"
                   justify="start"
@@ -61,7 +61,7 @@ export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
                     justify={"flex-start"}
                     gap={"0.5rem"}
                   >
-                    <IconNotes />
+                    <IconNotes color={svgColor} />
                   </Flex>
                 </Button>
               </Tooltip>
@@ -70,7 +70,6 @@ export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
               <Tooltip label="Todo" position="top-end" offset={5}>
                 <Button
                   variant="subtle"
-                  color="#ffffff"
                   fullWidth
                   className="nav-button"
                   justify="start"
@@ -82,32 +81,11 @@ export const LeftBar = ({ setCurrentPage }: LeftBarProps) => {
                     justify={"center"}
                     gap={"0.5rem"}
                   >
-                    <IconListCheck />
+                    <IconListCheck color={svgColor} />
                   </Flex>
                 </Button>
               </Tooltip>
             </Anchor>
-            {/* <Anchor w={"100%"}>
-              <Tooltip label="Todo" position="top-end" offset={5}>
-                <Button
-                  variant="subtle"
-                  color="#ffffff"
-                  fullWidth
-                  className="nav-button"
-                  justify="start"
-                  onClick={() => handleNavigation("Calender")}
-                >
-                  <Flex
-                    className="group-link"
-                    align={"center"}
-                    justify={"center"}
-                    gap={"0.5rem"}
-                  >
-                    <IconCalendar />
-                  </Flex>
-                </Button>
-              </Tooltip>
-            </Anchor> */}
           </Flex>
         </div>
       </div>

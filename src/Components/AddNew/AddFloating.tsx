@@ -20,7 +20,6 @@ export const FloatingContainer = ({
   content,
 }: FloatingContainerProps) => {
   const floatref = useRef<HTMLDivElement | null>(null);
-  // const [color, setColor] = useState("#ffffff");
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -82,7 +81,6 @@ export const FloatingContainer = ({
           <div
             className="test-page"
             style={{
-              // backgroundColor: color,
               padding: "1rem",
               borderRadius: "8px",
             }}

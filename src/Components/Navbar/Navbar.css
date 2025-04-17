@@ -1,0 +1,54 @@
+:root {
+  --mantine-primary-0: #f3f3f6;
+  --mantine-primary-1: #e4e4e6;
+  --mantine-primary-2: #c7c6ce;
+  --mantine-primary-3: #a8a6b6;
+  --mantine-primary-4: #8d8ba1;
+  --mantine-primary-5: #7c7a95; /* Default primary */
+  --mantine-primary-6: #747190;
+  --mantine-primary-7: #63607d;
+  --mantine-primary-8: #575571;
+  --mantine-primary-9: #4b4964;
+  --mantine-color-text: var(--mantine-primary-2) !important;
+  --bar-color: #3a3947;
+}
+
+.top-navbar {
+  height: 4rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: calc(100% - 6rem);
+  z-index: 10000;
+  background-color: var(--bar-color);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1rem;
+}
+
+.logo-container svg {
+  cursor: pointer;
+  height: 2rem;
+  width: 2rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.theme-button {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+}
+
+.user-ddm {
+  margin-right: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.user-ddm:hover {
+  transform: scale(1.1);
+}

@@ -42,7 +42,6 @@ export const CreateNew = () => {
         <Group className="create-new-collapse">
           <Button
             variant="filled"
-            color="#000"
             size="md"
             className="extra-button new-task-button"
             onClick={handleNew}
@@ -56,7 +55,6 @@ export const CreateNew = () => {
           </Button>
           <Button
             variant="filled"
-            color="#000"
             size="md"
             className="extra-button new-note-button"
             onClick={handleNew}

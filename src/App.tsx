@@ -17,16 +17,16 @@ export const App = () => {
     fontFamily: "__GeistSans, '__GeistSans_Fallback', sans-serif", // Use your custom font here
     colors: {
       customPrimary: [
-        "#ffffff", // 0 - Lightest (White)
-        "#f0f0f0", // 1 - Very light gray
-        "#d9d9d9", // 2 - Light gray
-        "#b3b3b3", // 3 - Medium light gray
-        "#8c8c8c", // 4 - Medium gray
-        "#666666", // 5 - Default shade (can be used for primaryColor, Mid gray)
-        "#4d4d4d", // 6 - Dark gray
-        "#333333", // 7 - Darker gray
-        "#1a1a1a", // 8 - Very dark gray
-        "#000000", // 9 - Darkest (Black)
+        "#f3f3f6", // 0 - Lightest (Lavender Mist)
+        "#e4e4e6", // 1 - Very Light Gray Lavender
+        "#c7c6ce", // 2 - Pale Grayish Violet
+        "#a8a6b6", // 3 - Soft Purple Gray
+        "#8d8ba1", // 4 - Muted Lavender
+        "#7c7a95", // 5 - Default Primary (Dusty Violet)
+        "#747190", // 6 - Gentle Indigo
+        "#63607d", // 7 - Deep Violet Gray
+        "#575571", // 8 - Dark Slate Lavender
+        "#4b4964", // 9 - Deepest Shade (Royal Gray Purple)
       ],
     },
     primaryColor: "customPrimary",

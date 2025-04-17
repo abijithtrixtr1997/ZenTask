@@ -266,18 +266,14 @@ export const DisplayTasks = ({
               <div className="delete-task">
                 <button className="edit-button" onClick={handleEdit}>
                   {isEditing ? (
-                    <IconX className="close-icon" size={15} color="#000" />
+                    <IconX className="close-icon" size={15} />
                   ) : (
-                    <IconPencil className="edit-icon" size={15} color="#000" />
+                    <IconPencil className="edit-icon" size={15} />
                   )}
                 </button>
 
                 <button className="delete-button" onClick={handleDelete}>
-                  <IconTrashFilled
-                    className="delete-icon"
-                    size={15}
-                    color="#000"
-                  />
+                  <IconTrashFilled className="delete-icon" size={15} />
                 </button>
               </div>
               <Checkbox

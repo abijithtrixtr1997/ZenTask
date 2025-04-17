@@ -1,3 +1,17 @@
+:root {
+  --mantine-primary-0: #f3f3f6;
+  --mantine-primary-1: #e4e4e6;
+  --mantine-primary-2: #c7c6ce;
+  --mantine-primary-3: #a8a6b6;
+  --mantine-primary-4: #8d8ba1;
+  --mantine-primary-5: #7c7a95; /* Default primary */
+  --mantine-primary-6: #747190;
+  --mantine-primary-7: #63607d;
+  --mantine-primary-8: #575571;
+  --mantine-primary-9: #4b4964;
+  --mantine-color-text: var(--mantine-primary-9) !important;
+}
+
 .outer-display-task {
   width: 100%;
   display: flex;
@@ -19,7 +33,6 @@
 
 .whole-task-list {
   border-radius: 12px;
-  background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,7 +45,6 @@
 
 .toggle-completed-tasks:hover {
   outline: none;
-  background-color: none;
 }
 
 .completed,
@@ -53,8 +65,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   border-radius: 12px 12px 12px 12px;
-  border: 1px ridge #ccc;
-  background: #f9f9f9;
+  background-color: var(--mantine-primary-8);
   width: 90%;
   height: auto;
   transition:
@@ -183,12 +194,12 @@
   height: 22px !important;
   padding: 0.5rem 0.5rem;
   border-radius: 10%;
-  background-color: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   border: none;
+  background-color: inherit;
 }
 
 .delete-task {
@@ -208,8 +219,6 @@
 
 .save-button {
   padding: 8px 16px;
-  background-color: #007bff; /* blue */
-  color: #fff;
   border: none;
   border-radius: 6px;
   font-size: 14px;
@@ -221,18 +230,12 @@
   animation: appear-edit 0.3s ease-in;
 }
 
-.save-button:hover {
-  color: #fff;
-  background-color: #0056b3; /* darker blue */
-}
-
 .save-button:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
 }
 
 .save-button:active {
-  background-color: #004a99;
   transform: scale(0.97);
 }
 .delete-icon,
@@ -264,7 +267,7 @@
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  border: 1px solid #8f9562;
+  border: 1px solid var(--mantine-primary-4);
   display: flex;
   align-items: center;
   justify-content: center;

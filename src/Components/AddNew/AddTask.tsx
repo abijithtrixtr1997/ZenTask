@@ -185,7 +185,7 @@ export const AddTask = ({ clicked, setClicked }: AddTaskProps) => {
                       variant="filled"
                       size="md"
                       p={"10"}
-                      radius={15}
+                      radius={8}
                       className="extra-button"
                     >
                       <IconClock size={20} className="add-desscription-icon" />
@@ -219,7 +219,7 @@ export const AddTask = ({ clicked, setClicked }: AddTaskProps) => {
                     variant="filled"
                     size="md"
                     p={"10"}
-                    radius={15}
+                    radius={8}
                     className="extra-button"
                   >
                     <IconFileDescription
@@ -249,8 +249,7 @@ export const AddTask = ({ clicked, setClicked }: AddTaskProps) => {
                   className="task-add-button"
                   type="submit"
                   size="md"
-                  color="#8f9562"
-                  radius={"25"}
+                  radius={"8"}
                 >
                   <IconSquareRoundedPlusFilled
                     className="add-icon"

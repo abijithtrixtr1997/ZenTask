@@ -4,8 +4,6 @@
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  font-family: Arial, sans-serif;
 }
 
 .profile-heading {
@@ -28,15 +26,10 @@
 
 .upload-button {
   margin-top: 10px;
-  background-color: #eee;
   border: none;
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-}
-
-.upload-button:hover {
-  background-color: #ddd;
 }
 
 .profile-form {
@@ -68,26 +61,15 @@
 }
 
 .save-button {
-  background-color: #007bff;
-  color: #fff;
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
-}
-
-.save-button:hover {
-  background-color: #0056b3;
 }
 
 .cancel-button {
-  background-color: #eee;
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
-}
-
-.cancel-button:hover {
-  background-color: #ddd;
 }

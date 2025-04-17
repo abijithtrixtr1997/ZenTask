@@ -1,0 +1,70 @@
+:root {
+  --mantine-primary-0: #f3f3f6;
+  --mantine-primary-1: #e4e4e6;
+  --mantine-primary-2: #c7c6ce;
+  --mantine-primary-3: #a8a6b6;
+  --mantine-primary-4: #8d8ba1;
+  --mantine-primary-5: #7c7a95; /* Default primary */
+  --mantine-primary-6: #747190;
+  --mantine-primary-7: #63607d;
+  --mantine-primary-8: #575571;
+  --mantine-primary-9: #4b4964;
+  --mantine-color-text: var(--mantine-primary-9) !important;
+}
+
+.sign-in {
+  opacity: 1;
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+.sign-up {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  transform: translate(50%, -50%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.sign-in.hidden {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.sign-up.hidden {
+  opacity: 0;
+  transform: translate(50%, -50%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.sign-up.active {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease-in-out;
+}
+
+.back-arrow-container {
+  position: relative;
+  width: 100%;
+}
+
+.back-arrow {
+  position: absolute;
+  top: 0%;
+  left: 10%;
+}
+
+.username-input,
+.password-input {
+  border-radius: 12px;
+  max-width: 300px;
+}
+
+.login-ext-button {
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

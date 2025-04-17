@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import { supabase } from "../../supabaseClient";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { handleBackClick } from "./signUpFunctions";
+import "./Register.css";
 
 interface SignUpFormValues {
   email: string;
@@ -121,11 +122,11 @@ export const SignUp = () => {
               label: { fontSize: "1rem", marginBottom: "0.3rem" }, // Custom font size
             }}
             w="100%"
-            variant="filled"
             mb={"0.75rem"}
             label="Password:"
             placeholder="Password..."
             {...form.getInputProps("password")}
+            style={{ border: "1px solid #4b4964" }}
           />
           <PasswordInput
             withAsterisk
@@ -133,7 +134,6 @@ export const SignUp = () => {
             styles={{
               label: { fontSize: "1rem", marginBottom: "0.3rem" }, // Custom font size
             }}
-            variant="filled"
             mb={"0.75rem"}
             label="Confirm Password"
             placeholder="Retype Password..."

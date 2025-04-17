@@ -4,11 +4,12 @@ import { ThemeToggle } from "./ThemeToggle";
 import { LogoSVG } from "../Images/SVG/SVGs";
 import { supabase } from "../../supabaseClient";
 import { User } from "@supabase/supabase-js";
-
+import "./Navbar.css";
 import { useNavigate } from "react-router-dom";
 // import { useState } from "react";
 
 export const Navbar = ({ user }: { user: User }) => {
+  const svgColor = "#c7c6ce";
   // const [profileOpen, setProfileOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const handleLogOut = async () => {
@@ -28,10 +29,10 @@ export const Navbar = ({ user }: { user: User }) => {
     <>
       <Flex align="center" justify="space-between" className="top-navbar">
         <div className="logo-container">
-          <LogoSVG fillColor="#fff" />
+          <LogoSVG fillColor={svgColor} />
         </div>
 
-        <Title order={1} style={{ fontSize: "2.8rem" }} ml={"1rem"} c={"#fff"}>
+        <Title order={1} style={{ fontSize: "2.8rem" }} ml={"1rem"}>
           ZenTask
         </Title>
         <Container className="theme-container" mr={"0.5rem"}>
@@ -64,7 +65,6 @@ export const Navbar = ({ user }: { user: User }) => {
                 fullWidth
                 onClick={handleNavigation}
                 className="settings-button"
-                c={"black"}
               >
                 Settings
               </Button>

@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
 import { LogoSVG } from "../Images/SVG/SVGs";
+import "./Register.css";
 
 export const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -58,7 +59,7 @@ export const SignIn = () => {
   return (
     <div className="sign-in">
       <div className="logo-heading">
-        <LogoSVG fillColor={"#000"} />
+        <LogoSVG fillColor={"#4b4964"} />
         <Title order={1} size={"xl"} fw={"700"} ta={"center"}>
           ZenTask
         </Title>
