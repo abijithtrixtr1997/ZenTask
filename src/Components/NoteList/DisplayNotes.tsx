@@ -6,89 +6,114 @@ import {
   IconTrashFilled,
 } from "@tabler/icons-react";
 import DOMPurify from "dompurify";
-import { useEffect, useState } from "react";
+import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { deleteNoteFunction } from "./DeleteNote";
+import { deleteNoteFunction, pinNoteFunction } from "./NoteFunctions";
 import { Note } from "../../types";
-import "../Styles/Notes.css";
+import "./Notes.css";
+import { FloatingContainer } from "../AddNew/AddFloating";
 
 interface DisplayNote {
   note: Note;
-  noteUpdated: boolean;
-  setNoteUpdated: (value: boolean) => void;
+  content: string;
+  image?: string | null;
 }
 
-export const DisplayNotes = ({
-  note,
-  noteUpdated,
-  setNoteUpdated,
-}: DisplayNote) => {
+export const DisplayNotes = ({ note, content, image }: DisplayNote) => {
   const dispatch = useDispatch();
-  const [noteToDisplay, setNoteToDisplay] = useState<Note | null>(null);
-  useEffect(() => {
-    setNoteToDisplay(note);
-    const noteWithImage = note.Content.includes("<img") ? note : "";
 
-    if (noteWithImage) {
-      const numberOfImages = (note.Content.match(/<img\b[^>]*>/g) || []).length;
-      const pTagContents = noteWithImage.Content.split(/<\/?p>/gi)
-        .map((part) => part.trim())
-        .filter((part) => part !== "");
-      if (pTagContents.length > 1) {
-        const otherParts = pTagContents.filter(
-          (part) => part.trim() !== "<br>" && part.trim() !== ""
-        );
+  const [isEditing, setIsEditing] = useState(false);
+  const selectedItem = "newNote";
+  const bottomToolbar = useRef<HTMLDivElement | null>(null);
+  const editButton = useRef<HTMLButtonElement | null>(null);
 
-        if (otherParts.length === numberOfImages) {
-          const imagesOnlyHTML = otherParts
-            .map((part) => `<p>${part}</p>`)
-            .join("");
-          setNoteToDisplay({ ...note, Content: imagesOnlyHTML });
-        }
+  const handleEdit = (e: React.MouseEvent) => {
+    if (bottomToolbar.current?.contains(e.target as Node)) {
+      if (editButton.current?.contains(e.target as Node)) {
+        setIsEditing(true);
+        return;
       }
+      return;
     }
-  }, []);
+    setIsEditing(true);
+  };
 
   const handleDelete = () => {
-    deleteNoteFunction(note.id, dispatch, setNoteUpdated, noteUpdated);
+    deleteNoteFunction(note.id, dispatch);
+  };
+
+  const handlePin = () => {
+    console.log("Pin clicked");
+    console.log(note);
+    pinNoteFunction(note.id, dispatch, !note.Pinned);
   };
 
   return (
-    <Container className="display-note" mb={10} p={10} maw={400}>
-      <Title order={3} ta={"center"}>
-        {noteToDisplay?.Title}
-      </Title>
-      <Text
-        size="sm"
-        ta={"left"}
-        className="note-display-text"
-        style={{
-          wordBreak: "break-word", // This ensures long words break to the next line
-          overflowWrap: "break-word",
-        }}
-        mb={20}
+    <>
+      <Container
+        className="display-note"
+        mb={10}
+        p={10}
         maw={400}
-        dangerouslySetInnerHTML={{
-          __html: DOMPurify.sanitize(noteToDisplay?.Content || ""),
-        }}
-      />
-      <div className="bottom-toolbar">
-        <button className="manipulate-button color-note-button">
-          <IconPaletteFilled size={14} />
-        </button>
-        <button className="manipulate-button pin-note-button">
-          <IconPinFilled size={14} />
-        </button>
-        <button className="manipulate-button edit-note-button">
-          <IconPencil size={14} />
-        </button>
-        <button
-          className="manipulate-button delete-note-button"
-          onClick={handleDelete}
-        >
-          <IconTrashFilled size={14} />
-        </button>
-      </div>
-    </Container>
+        onClick={handleEdit}
+      >
+        <div className="image-note-display">
+          {image && <img src={image}></img>}
+        </div>
+
+        <Title order={5} ta={"center"} className="note-display-title">
+          {note?.Title} {note?.Pinned}
+        </Title>
+        <Text
+          size="xs"
+          ta={"left"}
+          className="note-display-text"
+          style={{
+            wordBreak: "break-word", // This ensures long words break to the next line
+            overflowWrap: "break-word",
+          }}
+          mb={20}
+          maw={400}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(content || ""),
+          }}
+        />
+        <div className="bottom-toolbar" ref={bottomToolbar}>
+          <button className="manipulate-button color-note-button">
+            <IconPaletteFilled size={14} />
+          </button>
+          <button
+            className="manipulate-button pin-note-button"
+            onClick={handlePin}
+          >
+            <IconPinFilled size={14} />
+          </button>
+          <button
+            ref={editButton}
+            className="manipulate-button edit-note-button"
+            onClick={handleEdit}
+          >
+            <IconPencil size={14} />
+          </button>
+          <button
+            className="manipulate-button delete-note-button"
+            onClick={handleDelete}
+          >
+            <IconTrashFilled size={14} />
+          </button>
+        </div>
+      </Container>
+      {isEditing && note && (
+        <div className="for-floating">
+          <FloatingContainer
+            clicked={isEditing}
+            setClicked={setIsEditing}
+            selectedItem={selectedItem}
+            note={note}
+            content={content}
+          />
+        </div>
+      )}
+    </>
   );
 };

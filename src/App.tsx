@@ -11,7 +11,6 @@ import { Home } from "./Pages/Home";
 import classes from "./App.module.css";
 import "@fontsource/source-code-pro/400.css";
 import { store } from "./Store";
-import { Profile } from "./Components/Modals/Profile";
 
 export const App = () => {
   const theme = createTheme({
@@ -69,7 +68,6 @@ export const App = () => {
                 path="/"
                 element={user ? <Home user={user} /> : <Login />}
               />
-              <Route path="/profile" element={<Profile />} />
             </Routes>
           </Router>
         </MantineProvider>

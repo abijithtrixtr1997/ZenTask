@@ -6,8 +6,10 @@ import { supabase } from "../../supabaseClient";
 import { User } from "@supabase/supabase-js";
 
 import { useNavigate } from "react-router-dom";
+// import { useState } from "react";
 
 export const Navbar = ({ user }: { user: User }) => {
+  // const [profileOpen, setProfileOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const handleLogOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -19,7 +21,7 @@ export const Navbar = ({ user }: { user: User }) => {
     }
   };
   const handleNavigation = () => {
-    navigate("/profile");
+    // setProfileOpen(true);
   };
 
   return (
@@ -50,18 +52,23 @@ export const Navbar = ({ user }: { user: User }) => {
             </div>
           </Popover.Target>
           <Popover.Dropdown>
-            <Flex className="ddm-menu" align={"center"} direction={"column"}>
+            <Flex
+              className="ddm-menu"
+              align={"center"}
+              direction={"column"}
+              gap={10}
+            >
               <Button
                 variant="subtle"
                 justify="center"
                 fullWidth
                 onClick={handleNavigation}
+                className="settings-button"
+                c={"black"}
               >
-                Profile
-              </Button>
-              <Button variant="subtle" justify="center" fullWidth mb={"0.5rem"}>
                 Settings
               </Button>
+
               <Button
                 variant="danger"
                 justify="center"

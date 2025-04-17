@@ -1,0 +1,27 @@
+.gemini-response {
+  margin-top: 20px;
+  box-shadow:
+    2px 2px 5px rgba(0, 0, 0, 0.3),
+    -2px -2px 5px rgba(0, 0, 0, 0.3);
+  padding: 2.5rem;
+  border-radius: 12px;
+  max-width: 80%;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 2rem;
+}
+
+.gemini-response h1 {
+  font-size: 2rem;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}

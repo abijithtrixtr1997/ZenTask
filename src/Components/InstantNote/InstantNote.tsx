@@ -6,12 +6,10 @@ import { FloatingContainer } from "../AddNew/AddFloating";
 
 export const InstantNote = () => {
   const [clicked, setClicked] = useState<boolean>(false);
-  const [clickedForNewNote, setClickedForNewNote] = useState<boolean>(false);
   const selectedItem = "newNote";
 
   const handleNewNote = () => {
     setClicked(true);
-    setClickedForNewNote(true);
   };
 
   return (
@@ -28,8 +26,6 @@ export const InstantNote = () => {
       {clicked && (
         <div className="for-floating">
           <FloatingContainer
-            clickedForNewNote={clickedForNewNote}
-            setClickedForNewNote={setClickedForNewNote}
             clicked={clicked}
             setClicked={setClicked}
             selectedItem={selectedItem} // Pass the selected item to FloatingContainer

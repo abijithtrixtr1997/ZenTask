@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  transition: all 0.3s ease-in-out;
 }
 
 .task-whole-list {
@@ -60,10 +61,13 @@
     transform 0.3s ease-in-out,
     box-shadow 0.3s ease-in-out;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  position: relative;
 }
 
 .display-task:hover {
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.35);
+  transform: translateX(5px);
 }
 
 .individual-task {
@@ -232,7 +236,8 @@
   transform: scale(0.97);
 }
 .delete-icon,
-.edit-icon {
+.edit-icon,
+.close-icon {
   position: absolute;
   transition:
     transform 0.3s ease-in-out,
@@ -248,6 +253,11 @@
 .edit-button:hover .edit-icon {
   fill: grey;
   stroke: grey;
+}
+
+.edit-button:hover .close-icon {
+  fill: red;
+  stroke: red;
 }
 
 .done-toggle-display {

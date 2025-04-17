@@ -1,25 +1,26 @@
 import { useEffect, useRef } from "react";
-// import { AddEvent } from "./AddEvent";
 import { AddNote } from "./AddNote";
 import { AddTask } from "./AddTask";
 import { IconX } from "@tabler/icons-react";
+import { Note } from "../../types";
 
 interface FloatingContainerProps {
   clicked: boolean; // Function to notify the parent that task was added
   setClicked: (clicked: boolean) => void;
   selectedItem: string | null;
-  clickedForNewNote: boolean;
-  setClickedForNewNote: (value: boolean) => void;
+  note?: Note;
+  content?: string;
 }
 
 export const FloatingContainer = ({
   clicked,
   setClicked,
   selectedItem,
-  clickedForNewNote,
-  setClickedForNewNote,
+  note,
+  content,
 }: FloatingContainerProps) => {
   const floatref = useRef<HTMLDivElement | null>(null);
+  // const [color, setColor] = useState("#ffffff");
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -63,21 +64,12 @@ export const FloatingContainer = ({
       case "newNote":
         return (
           <AddNote
+            note={note}
             clicked={clicked}
             setClicked={setClicked}
-            clickedForNewNote={clickedForNewNote}
-            setClickedForNewNote={setClickedForNewNote}
+            content={content}
           />
         );
-      // case "newEvent":
-      //   return (
-      //     <AddEvent
-      //       setTaskAdded={setTaskAdded}
-      //       taskAdded={taskAdded}
-      //       clicked={clicked}
-      //       setClicked={setClicked}
-      //     />
-      //   );
       default:
         return null;
     }
@@ -86,8 +78,16 @@ export const FloatingContainer = ({
   return (
     <>
       {clicked && (
-        <div className="outer-task-input">
-          <div className="task-input-container" ref={floatref}>
+        <div className="complete-floating">
+          <div
+            className="test-page"
+            style={{
+              // backgroundColor: color,
+              padding: "1rem",
+              borderRadius: "8px",
+            }}
+            ref={floatref}
+          >
             <button
               onClick={() => setClicked(false)}
               className="close-button"

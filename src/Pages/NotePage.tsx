@@ -2,7 +2,7 @@ import { User } from "@supabase/supabase-js";
 import { NoteList } from "../Components/NoteList/NoteList";
 import { Flex } from "@mantine/core";
 import { InstantNote } from "../Components/InstantNote/InstantNote";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { supabase } from "../supabaseClient";
 import { setNotes } from "../Components/Slices/NoteSlice";
 import { useDispatch } from "react-redux";
@@ -13,29 +13,31 @@ interface NotePageProps {
 
 export const NotePage = ({ user }: NotePageProps) => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const getNotes = async () => {
-      setLoading(true);
+    const fetchNotes = async () => {
+      console.log("fetching notes");
       const { data, error } = await supabase
         .from("Notes")
         .select()
-        .eq("uuid", user?.id);
+        .eq("uuid", user.id)
+        .order("created_at", { ascending: false });
+
       if (error) {
         console.error("Error fetching notes:", error);
-      } else {
-        dispatch(setNotes(data));
+        return;
       }
-      setLoading(false);
+
+      dispatch(setNotes(data));
     };
-    getNotes();
+
+    fetchNotes();
   }, [user]);
 
   return (
-    <Flex className="note-page" p={20}>
+    <Flex className="note-page" p={20} pb={20} mb={20}>
       <InstantNote />
-      {loading ? null : <NoteList user={user} />}
+      <NoteList />
     </Flex>
   );
 };

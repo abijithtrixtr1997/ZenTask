@@ -1,26 +1,18 @@
-import { User } from "@supabase/supabase-js";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DisplayNotes } from "./DisplayNotes";
 import { Flex } from "@mantine/core";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store";
 import { Note } from "../../types";
 
-interface NoteListProps {
-  user: User;
-}
-
-export const NoteList = ({ user }: NoteListProps) => {
-  const [noteUpdated, setNoteUpdated] = useState<boolean>(false);
+export const NoteList = () => {
   const [localNotes, setLocalNotes] = useState<Note[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const notes = useSelector((state: RootState) => state.note.notes);
+  const noteList = useSelector((state: RootState) => state.note.notes);
 
   useEffect(() => {
-    setLocalNotes(notes);
-    console.log("useEffect called");
-    setLoading(false);
-  }, [notes, user]);
+    console.log("noteList has changed");
+    setLocalNotes(noteList);
+  }, [noteList]);
 
   return (
     <Flex
@@ -30,25 +22,22 @@ export const NoteList = ({ user }: NoteListProps) => {
       p={20}
     >
       <h1 style={{ marginBottom: "1rem" }}>Notes</h1>
-
-      {loading ? (
-        <p>Your notes are being loaded...</p>
-      ) : (
-        <div className="all-notes">
-          {localNotes.length > 0 ? (
-            localNotes.map((note) => (
+      <div className="all-notes">
+        {localNotes.length > 0 ? (
+          localNotes.map((note) => (
+            <>
               <DisplayNotes
-                key={note?.id}
+                key={note.id}
                 note={note}
-                noteUpdated={noteUpdated}
-                setNoteUpdated={setNoteUpdated}
+                content={note.Content}
+                image={note.Image}
               />
-            ))
-          ) : (
-            <li>No notes found</li>
-          )}
-        </div>
-      )}
+            </>
+          ))
+        ) : (
+          <li>No notes found</li>
+        )}
+      </div>
     </Flex>
   );
 };

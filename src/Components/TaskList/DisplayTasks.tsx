@@ -3,7 +3,12 @@ import { useState, useEffect, useRef } from "react";
 import { updateTaskInDB, updateTaskLocally } from "../Slices/TodoSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../Store";
-import { IconCheck, IconPencil, IconTrashFilled } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconPencil,
+  IconTrashFilled,
+  IconX,
+} from "@tabler/icons-react";
 import { format, formatDistanceToNow, differenceInMinutes } from "date-fns";
 import { DateTimePicker } from "../Date_And_Time/Time";
 import { deleteTask } from "./DeleteTask";
@@ -32,6 +37,8 @@ export const DisplayTasks = ({
   const [showMoreFields, setShowMoreFields] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
   const tasks = useSelector((state: RootState) => state.todo.tasks);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const outerRef = useRef<HTMLDivElement>(null);
 
   const getDueColor = (minutesUntilDue: number) => {
     if (!checked) {
@@ -45,6 +52,31 @@ export const DisplayTasks = ({
   useEffect(() => {
     setChecked(task.completed);
   }, [task.completed]);
+
+  useEffect(() => {
+    const taskEl = innerRef.current;
+    const outerEl = outerRef.current;
+
+    const handleMouseEnter = () => {
+      outerEl?.classList.add("hovered");
+    };
+
+    const handleMouseLeave = () => {
+      outerEl?.classList.remove("hovered");
+    };
+
+    if (taskEl) {
+      taskEl.addEventListener("mouseenter", handleMouseEnter);
+      taskEl.addEventListener("mouseleave", handleMouseLeave);
+    }
+
+    return () => {
+      if (taskEl) {
+        taskEl.removeEventListener("mouseenter", handleMouseEnter);
+        taskEl.removeEventListener("mouseleave", handleMouseLeave);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -97,7 +129,7 @@ export const DisplayTasks = ({
   };
 
   const handleEdit = () => {
-    setIsEditing(true);
+    setIsEditing(!isEditing);
   };
 
   const handleSave = async () => {
@@ -136,8 +168,8 @@ export const DisplayTasks = ({
   };
 
   return (
-    <div className="outer-display-task">
-      <Container className="display-task" p={10}>
+    <div className="outer-display-task" ref={outerRef}>
+      <Container className="display-task" p={10} ref={innerRef}>
         <Flex
           ref={editorRef}
           className={isEditing ? `individual-task editing` : `individual-task`}
@@ -233,7 +265,11 @@ export const DisplayTasks = ({
             >
               <div className="delete-task">
                 <button className="edit-button" onClick={handleEdit}>
-                  <IconPencil className="edit-icon" size={15} color="#000" />
+                  {isEditing ? (
+                    <IconX className="close-icon" size={15} color="#000" />
+                  ) : (
+                    <IconPencil className="edit-icon" size={15} color="#000" />
+                  )}
                 </button>
 
                 <button className="delete-button" onClick={handleDelete}>

@@ -1,49 +1,39 @@
-import { useEffect, useState, useRef } from "react";
-import { Container, Button, Flex, TextInput } from "@mantine/core"; // Import Bootstrap components
-import Quill from "quill";
-import "quill/dist/quill.snow.css"; // Import Quill styles
-import { IconDeviceFloppy } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { IconPalette, IconPhoto, IconPin } from "@tabler/icons-react";
 import { supabase } from "../../supabaseClient"; // Import Supabase client
 import { User } from "@supabase/supabase-js";
-import { insertNoteInDB } from "../Slices/NoteSlice";
+import { insertNoteInDB, updateNoteInDB } from "../Slices/NoteSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../Store";
+import { Note } from "../../types";
+import "./test.css";
 
 interface AddNoteProps {
   clicked: boolean; // Function to notify the parent that task was added
   setClicked: (clicked: boolean) => void;
-  clickedForNewNote: boolean;
-  setClickedForNewNote: (value: boolean) => void;
+  note?: Note;
+  content?: string;
 }
 
 export const AddNote = ({
   clicked,
   setClicked,
-  clickedForNewNote,
-  setClickedForNewNote,
+  note,
+  content,
 }: AddNoteProps) => {
-  const editorRef = useRef<HTMLDivElement | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [quill, setQuill] = useState<Quill | null>(null);
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState<string>(note?.Title ?? "");
   const dispatch = useDispatch<AppDispatch>();
+  const [description, setDescription] = useState<string>(content ?? "");
+  const [isPinned, setIsPinned] = useState(false);
+  const [image, setImage] = useState<File | string | null>(note?.Image || null);
 
-  useEffect(() => {
-    if (!quill && editorRef.current) {
-      const quillInstance = new Quill(editorRef.current, {
-        theme: "snow",
-        placeholder: "Write your note here...",
-        modules: {
-          toolbar: [
-            ["bold", "italic", "underline"],
-            ["link", "image"],
-            ["clean"],
-          ],
-        },
-      });
-      setQuill(quillInstance);
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("image upload clicked");
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
     }
-  }, [quill]);
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -57,89 +47,156 @@ export const AddNote = ({
   }, [user]);
 
   const handleSave = async () => {
-    if (quill) {
-      const noteContent = quill.root.innerHTML;
-      const plainText = quill.getText();
-      const editorElement = quill.root;
+    if (!user) {
+      console.error("User not authenticated");
+      return;
+    }
 
-      const trimContent = (htmlContent: string) => {
-        if (htmlContent.includes("<img")) {
-          return htmlContent;
+    if (!title && !description && !image) {
+      console.warn("Note is empty. Skipping save.");
+      return;
+    }
+
+    try {
+      console.log(note ? "Updating note..." : "Saving new note...");
+      let imageURL = "";
+
+      if (image && image instanceof File) {
+        const fileName = `${Date.now()}-${image.name}`;
+        const { data, error } = await supabase.storage
+          .from("images")
+          .upload(fileName, image);
+
+        if (error) {
+          console.error("Error uploading image:", error.message);
+        } else {
+          console.log(data);
+          const { data: url } = supabase.storage
+            .from("images")
+            .getPublicUrl(fileName);
+          imageURL = url.publicUrl;
         }
-
-        const trimmed = htmlContent.replace(/<\/?[^>]+(>|$)/g, "");
-
-        return trimmed.length > 3
-          ? trimmed.substring(3, trimmed.length - 4).trim()
-          : "";
-      };
-
-      const trimmedNoteContent = trimContent(noteContent);
-      if (
-        plainText.trim() === "" &&
-        title === "" &&
-        (trimmedNoteContent.trim() === "" ||
-          trimmedNoteContent.trim() === "<br>")
-      ) {
-        editorElement.classList.add("empty-note");
-        return;
       }
-      if (user) {
-        const newNote = {
+
+      if (note) {
+        // ✏️ Update existing note
+        const noteUpdate = {
+          id: note.id,
+          updates: {
+            Content: description,
+            Title: title,
+            Pinned: isPinned,
+            updatedAt: new Date().toISOString(),
+            Image: imageURL || note.Image || "",
+          },
+        };
+        const result = await dispatch(updateNoteInDB(noteUpdate)).unwrap();
+        console.log("Note updated:", result);
+      } else {
+        // 🆕 Insert new note
+        const newNote: Note = {
           id: crypto.randomUUID(),
+          Content: description,
+          created_at: new Date().toISOString(),
           uuid: user.id,
           Title: title,
-          Content: noteContent,
-          created_at: new Date().toISOString(),
+          Pinned: isPinned,
+          updatedAt: new Date().toISOString(),
+          Image: imageURL,
         };
-
-        try {
-          await dispatch(insertNoteInDB(newNote));
-        } catch (error) {
-          console.error("Unexpected error saving note:", error);
-        }
-
-        editorElement.classList.remove("empty-note");
-        setClicked(false);
-        setClickedForNewNote(false);
+        const result = await dispatch(insertNoteInDB(newNote)).unwrap();
+        console.log("Note inserted:", result);
       }
+
+      setTitle("");
+      setDescription("");
+      setImage(null);
+      setIsPinned(false);
+      setClicked(false);
+    } catch (err) {
+      console.error("Error saving note:", err);
     }
   };
 
   return (
     clicked && (
-      <Container className="note-container" p={10} pt={60}>
-        <TextInput
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter your title here"
-          mb={10} // margin-bottom for spacing
-          w={"100%"} // full width
-          className="note-title-input"
-          autoFocus={clickedForNewNote}
-        />
-        <div className="toolbar-editor">
-          <div className="editor" ref={editorRef} />
-        </div>
+      <>
+        {typeof image === "string" && (
+          <img
+            src={image}
+            alt="Existing"
+            className="uploaded-image"
+            style={{
+              width: "100%",
+              maxWidth: "500px",
+              maxHeight: "300px",
+              objectFit: "cover",
+              borderRadius: "8px",
+            }}
+          />
+        )}
 
-        <Button
-          className="save-note-button"
-          onClick={handleSave}
-          size="xs"
-          p={10}
-          h={40}
-          variant="filled"
-        >
-          <Flex
-            justify="center"
-            align="center"
-            className="save-note-button-content"
+        {image instanceof File && (
+          <div className="image-container">
+            <img
+              src={URL.createObjectURL(image)}
+              className="uploaded-image"
+              alt="Uploaded"
+              style={{
+                width: "100%",
+                maxWidth: "500px",
+                maxHeight: "300px",
+                objectFit: "cover",
+                borderRadius: "8px",
+              }}
+            />
+          </div>
+        )}
+        <div className="note-group">
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="test-title"
+            placeholder="Title"
+          />
+
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="test-description"
+            placeholder="Write Note"
+          />
+        </div>
+        <div className="bottom-bar">
+          <label className="color-picker bottom-button">
+            <IconPalette />
+          </label>
+
+          <span
+            onClick={() => setIsPinned((prev) => !prev)}
+            className="pin-button bottom-button"
           >
-            <IconDeviceFloppy size={16} stroke={1.5} />
-            <p>Save Note</p>
-          </Flex>
-        </Button>
-      </Container>
+            <IconPin />
+          </span>
+
+          <label
+            style={{ cursor: "pointer" }}
+            className="image-upload bottom-button"
+          >
+            <IconPhoto size={20} />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              style={{ display: "none" }}
+            />
+          </label>
+        </div>
+        <button className="save-button" onClick={handleSave}>
+          Save
+        </button>
+      </>
     )
   );
 };

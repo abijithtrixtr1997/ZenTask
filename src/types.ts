@@ -14,4 +14,7 @@ export interface Note {
   created_at: string;
   uuid: string;
   Title: string;
+  Pinned: boolean;
+  updatedAt: string;
+  Image: string | null;
 }

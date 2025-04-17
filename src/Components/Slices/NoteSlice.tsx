@@ -8,7 +8,12 @@ interface NoteState {
 
 interface NoteUpdate {
   id: string;
-  updates: Partial<Omit<Note, "id">>;
+  updates: Partial<Omit<Note, "id" | "created_at">>;
+}
+
+interface pinNote {
+  id: `${string}-${string}-${string}-${string}-${string}`;
+  pin: boolean;
 }
 
 const initialState: NoteState = {
@@ -25,6 +30,7 @@ export const insertNoteInDB = createAsyncThunk(
     if (error) {
       return rejectWithValue(error.message);
     }
+    console.log(data, "data");
     return data;
   }
 );
@@ -39,11 +45,31 @@ export const updateNoteInDB = createAsyncThunk(
     const { data, error } = await supabase
       .from("Notes")
       .update(updates)
-      .eq("id", id);
+      .eq("id", id)
+      .select();
     if (error) {
       return rejectWithValue(error.message);
     }
 
+    return data;
+  }
+);
+
+export const pinNoteInDB = createAsyncThunk(
+  "notes/pinNoteInDB",
+  async ({ id, pin }: pinNote, { rejectWithValue }) => {
+    if (!id) {
+      return rejectWithValue("No note id provided.");
+    }
+
+    const { data, error } = await supabase
+      .from("Notes")
+      .update({ Pinned: pin })
+      .eq("id", id)
+      .select();
+    if (error) {
+      return rejectWithValue(error.message);
+    }
     return data;
   }
 );
@@ -89,6 +115,14 @@ const noteSlice = createSlice({
     deleteNote: (state, action: PayloadAction<string>) => {
       state.notes = state.notes.filter((note) => note.id !== action.payload);
     },
+    pinNote: (state, action: PayloadAction<string>) => {
+      state.notes = state.notes.map((note) => {
+        if (note.id === action.payload) {
+          return { ...note, Pinned: !note.Pinned };
+        }
+        return note;
+      });
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -109,7 +143,7 @@ const noteSlice = createSlice({
             (note) => note.id === updatedNote.id
           );
           if (index !== -1) {
-            state.notes[index] = updatedNote;
+            state.notes[index] = { ...state.notes[index], ...updatedNote };
           }
         }
       })
@@ -132,6 +166,21 @@ const noteSlice = createSlice({
       .addCase(deleteNoteInDB.rejected, (state, action) => {
         console.error("Error deleting task:", action.payload);
         console.log("State before deletion", state);
+      })
+      .addCase(pinNoteInDB.fulfilled, (state, action) => {
+        if (action.payload && Array.isArray(action.payload)) {
+          const updatedNote = action.payload[0] as Note;
+          const index = state.notes.findIndex(
+            (note) => note.id === updatedNote.id
+          );
+          if (index !== -1) {
+            state.notes[index] = updatedNote;
+          }
+        }
+      })
+      .addCase(pinNoteInDB.rejected, (state, action) => {
+        console.error("Error pinning task:", action.payload);
+        console.log("State before pinning", state);
       });
   },
 });
